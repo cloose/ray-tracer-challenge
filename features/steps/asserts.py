@@ -1,0 +1,19 @@
+_EPSILON = 0.00001
+
+
+def assert_float(actual, expected):
+    """Asserts that two floats are equal."""
+    assert equal(actual, expected), \
+            f"{actual} is not {expected}"
+
+
+def assert_tuple(actual, expected):
+    """Asserts that two tuples are equal."""
+    size = len(actual)
+    for val in range(size):
+        assert equal(actual[val], expected[val]), \
+                f"error at index {val}: {actual} is not {expected}"
+
+
+def equal(left, right):
+    return abs(left - right) < _EPSILON
