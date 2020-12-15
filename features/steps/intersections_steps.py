@@ -1,3 +1,4 @@
+from math import sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from intersection import Intersection, hit
 
@@ -7,6 +8,11 @@ _EPSILON = 0.00001
 @given(u'i1 <- intersection({t:g}, s)')
 def step_impl(context, t):
     context.i1 = Intersection(t, context.s)
+
+
+@given(u'i1 <- intersection(sqrt(2), p)')
+def step_determine_intersection_i1_at_sqrt_2_for_p(context):
+    context.i1 = Intersection(sqrt(2), context.p)
 
 
 @given(u'i1 <- intersection({t:g}, s1)')

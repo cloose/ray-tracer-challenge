@@ -29,3 +29,10 @@ Scenario: The hit, when an intersection occurs on the inside
   # normal would have been (0, 0, 1), but is inverted!
   And shape_hit.normalv = vector(0, 0, -1)
 
+Scenario: Precomputing the reflection vector
+  Given p <- plane()
+  And r <- ray(point(0, 1, -1), vector(0, -sqrt(2)/2, sqrt(2)/2))
+  And i1 <- intersection(sqrt(2), p)
+  When shape_hit <- hit(i1, r)
+  Then shape_hit.reflectv = vector(0, sqrt(2)/2, sqrt(2)/2)
+

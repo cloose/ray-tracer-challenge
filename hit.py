@@ -1,4 +1,4 @@
-from tuples import negate, dot, add, multiply
+from tuples import negate, dot, add, multiply, reflect
 
 
 class Hit:
@@ -17,3 +17,5 @@ class Hit:
             self.normalv = negate(self.normalv)
 
         self.over_point = add(self.point, multiply(self.normalv, self.EPSILON))
+
+        self.reflectv = reflect(ray.direction, self.normalv)

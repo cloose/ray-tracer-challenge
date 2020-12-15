@@ -1,3 +1,4 @@
+from math import sqrt
 from behave import when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float, assert_tuple
 from tuples import point, vector
@@ -37,3 +38,10 @@ def step_assert_shape_hit_normalv_equals_vector(context, x, y, z):
 @then(u'shape_hit.inside = {expected}')
 def step_assert_shape_hit_inside(context, expected):
     assert context.shape_hit.inside == (expected.lower() == "true")
+
+
+@then(u'shape_hit.reflectv = vector(0, sqrt(2)/2, sqrt(2)/2)')
+def step_assert_shape_hit_reflectv_equals_specific_vector(context):
+    assert_tuple(context.shape_hit.reflectv, vector(0,
+                                                    sqrt(2) / 2,
+                                                    sqrt(2) / 2))

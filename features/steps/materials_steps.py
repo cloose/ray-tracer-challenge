@@ -91,6 +91,11 @@ def step_assert_shininess_of_m(context, expected):
     assert_float(context.m.shininess, expected)
 
 
+@then(u'm.reflective = {expected:g}')
+def step_assert_reflective_of_m(context, expected):
+    assert_float(context.m.reflective, expected)
+
+
 @then(u'c1 = color({red:g}, {green:g}, {blue:g})')
 def step_assert_color_of_c1(context, red, green, blue):
     assert_tuple(context.c1, color(red, green, blue))

@@ -108,3 +108,71 @@ Scenario: shade_hit() is given an intersection in shadow
   And c <- shade_hit(w, shape_hit)
   Then c = color(0.1, 0.1, 0.1)
 
+Scenario: The reflected color for a nonreflective material
+  Given w <- default_world()
+  And r <- ray(point(0, 0, 0), vector(0, 0, 1))
+  And s2 <- the second object in w
+  And s2.material.ambient <- 1
+  And i1 <- intersection(1, s2)
+  When shape_hit <- hit(i1, r)
+  And c <- reflected_color(w, shape_hit)
+  Then c = color(0, 0, 0)
+
+Scenario: The reflected color for a reflective material
+  Given w <- default_world()
+  And p <- plane() with:
+    | variable  | value                 |
+    | material.reflective | 0.5 |
+    | transform | translation(0, -1, 0) |
+  And p is added to w
+  And r <- ray(point(0, 0, -3), vector(0, -sqrt(2)/2, sqrt(2)/2))
+  And i1 <- intersection(sqrt(2), p)
+  When shape_hit <- hit(i1, r)
+  And c <- reflected_color(w, shape_hit)
+  #Then c = color(0.19032, 0.2379, 0.14274)
+  Then c = color(0.19033, 0.23791, 0.14274)
+
+Scenario: shade_hit() with a reflective material
+  Given w <- default_world()
+  And p <- plane() with:
+    | variable  | value                 |
+    | material.reflective | 0.5 |
+    | transform | translation(0, -1, 0) |
+  And p is added to w
+  And r <- ray(point(0, 0, -3), vector(0, -sqrt(2)/2, sqrt(2)/2))
+  And i1 <- intersection(sqrt(2), p)
+  When shape_hit <- hit(i1, r)
+  And c <- shade_hit(w, shape_hit)
+  #Then c = color(0.87677, 0.92436, 0.82918)
+  Then c = color(0.87675, 0.92434, 0.82918)
+
+Scenario: color_at() with mutually reflective surfaces
+  Given w <- world()
+  And light <- point_light(point(0, 0, 0), color(1, 1, 1))
+  And p <- plane() with:
+    | variable  | value                 |
+    | material.reflective | 1 |
+    | transform | translation(0, -1, 0) |
+  And p is added to w
+  And p2 <- plane() with:
+    | variable  | value                 |
+    | material.reflective | 1 |
+    | transform | translation(0, 1, 0) |
+  And p2 is added to w
+  And r <- ray(point(0, 0, 0), vector(0, 1, 0))
+  When w.light <- light
+  Then color_at(w, r) should terminate successfully
+
+Scenario: The reflected color at the maximum recursive depth
+  Given w <- default_world()
+  And p <- plane() with:
+    | variable  | value                 |
+    | material.reflective | 0.5 |
+    | transform | translation(0, -1, 0) |
+  And p is added to w
+  And r <- ray(point(0, 0, -3), vector(0, -sqrt(2)/2, sqrt(2)/2))
+  And i1 <- intersection(sqrt(2), p)
+  When shape_hit <- hit(i1, r)
+  And c <- reflected_color(w, shape_hit, 0)
+  Then c = color(0, 0, 0)
+

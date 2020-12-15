@@ -21,6 +21,13 @@ def step_impl(context, ox, oy, oz, dx, dy, dz):
     context.r = Ray(point(ox, oy, oz), vector(dx, dy, dz))
 
 
+@given(
+    u'r <- ray(point({ox:g}, {oy:g}, {oz:g}), vector(0, -sqrt(2)/2, sqrt(2)/2))'
+)
+def step_create_ray_with_point_and_specific_direction(context, ox, oy, oz):
+    context.r = Ray(point(ox, oy, oz), vector(0, -sqrt(2) / 2, sqrt(2) / 2))
+
+
 @when(u'r <- ray(origin, direction)')
 def step_impl(context):
     context.r = Ray(context.origin, context.direction)

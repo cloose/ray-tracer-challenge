@@ -3,7 +3,16 @@ from asserts import assert_tuple, assert_float
 from tuples import color
 from transformations import scaling, translation
 from sphere import Sphere
+from plane import Plane
 from world import World
+
+TRANSFORMATIONS = {
+    'scaling(0.5, 0.5, 0.5)': scaling(0.5, 0.5, 0.5),
+    'translation(0, 0, 10)': translation(0, 0, 10),
+    'translation(0, 0, 1)': translation(0, 0, 1),
+    'translation(0, -1, 0)': translation(0, -1, 0),
+    'translation(0, 1, 0)': translation(0, 1, 0)
+}
 
 
 @given(u'w <- world()')
@@ -28,14 +37,30 @@ def step_create_sphere_s1_with(context):
 def step_create_sphere_s2_with(context):
     context.s2 = Sphere()
     first_row = context.table[0]
-
-    transformations = {
-        'scaling(0.5, 0.5, 0.5)': scaling(0.5, 0.5, 0.5),
-        'translation(0, 0, 10)': translation(0, 0, 10),
-        'translation(0, 0, 1)': translation(0, 0, 1)
-    }
     if first_row['variable'] == 'transform':
-        context.s2.set_transform(transformations.get(first_row['value']))
+        context.s2.set_transform(TRANSFORMATIONS.get(first_row['value']))
+
+
+@given(u'p <- plane() with')
+def step_create_plane_p_with(context):
+    context.p = Plane()
+    for row in context.table:
+        if row['variable'] == 'material.reflective':
+            context.p.material.reflective = float(row['value'])
+
+        if row['variable'] == 'transform':
+            context.p.set_transform(TRANSFORMATIONS.get(row['value']))
+
+
+@given(u'p2 <- plane() with')
+def step_create_plane_p2_with(context):
+    context.p2 = Plane()
+    for row in context.table:
+        if row['variable'] == 'material.reflective':
+            context.p2.material.reflective = float(row['value'])
+
+        if row['variable'] == 'transform':
+            context.p2.set_transform(TRANSFORMATIONS.get(row['value']))
 
 
 @given(u's1 <- the first object in w')
@@ -68,6 +93,16 @@ def step_add_s2_to_w(context):
     context.w.objects.append(context.s)
 
 
+@given(u'p is added to w')
+def step_add_p_to_w(context):
+    context.w.objects.append(context.p)
+
+
+@given(u'p2 is added to w')
+def step_add_p2_to_w(context):
+    context.w.objects.append(context.p2)
+
+
 @when(u'w.light <- light')
 def step_set_light_of_w_to_light(context):
     context.w.light = context.light
@@ -86,6 +121,16 @@ def step_set_xs_to_intersect_world_w_r(context):
 @when(u'c <- color_at(w, r)')
 def step_set_s_to_color_at_w_r(context):
     context.c = context.w.color_at(context.r)
+
+
+@when(u'c <- reflected_color(w, shape_hit)')
+def step_set_c_to_reflected_color_w_shape_hit(context):
+    context.c = context.w.reflected_color(context.shape_hit)
+
+
+@when(u'c <- reflected_color(w, shape_hit, {remaining:d})')
+def step_set_c_to_reflected_color_w_shape_hit(context, remaining):
+    context.c = context.w.reflected_color(context.shape_hit, remaining)
 
 
 @then(u'w contains no objects')
@@ -126,3 +171,8 @@ def step_assert_c_equals_s2_material_color(context):
 @then(u'is_shadowed(w, p) is {expected}')
 def step_assert_p_is_not_in_shaddow(context, expected):
     assert context.w.is_shadowed(context.p) == (expected.lower() == "true")
+
+
+@then(u'color_at(w, r) should terminate successfully')
+def step_assert_color_at_terminates(context):
+    assert not context.w.color_at(context.r) is None

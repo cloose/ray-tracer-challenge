@@ -53,8 +53,10 @@ def render_scene_with_plane():
         multiply(translation(1.5, 0.5, -0.5), scaling(0.5, 0.5, 0.5)))
     right.material = Material()
     right.material.color = color(0.5, 1, 0.1)
-    right.material.diffuse = 0.7
+    # right.material.diffuse = 0.7
+    right.material.diffuse = 0.2
     right.material.specular = 0.3
+    right.material.reflective = 0.7
 
     left = Sphere()
     left.set_transform(

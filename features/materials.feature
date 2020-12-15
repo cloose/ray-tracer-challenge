@@ -67,3 +67,8 @@ Scenario: Lighting with a pattern applied
   And c2 <- lighting(m, s, light, point(1.1, 0, 0), v1, v2, false)
   Then c1 = color(1, 1, 1)
   And c2 = color(0, 0, 0)
+
+Scenario: Reflectivity for the default material
+  Given m <- material()
+  Then m.reflective = 0.0
+
