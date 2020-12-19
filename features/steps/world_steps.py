@@ -11,8 +11,35 @@ TRANSFORMATIONS = {
     'translation(0, 0, 10)': translation(0, 0, 10),
     'translation(0, 0, 1)': translation(0, 0, 1),
     'translation(0, -1, 0)': translation(0, -1, 0),
-    'translation(0, 1, 0)': translation(0, 1, 0)
+    'translation(0, 1, 0)': translation(0, 1, 0),
+    'translation(0, -3.5, -0.5)': translation(0, -3.5, -0.5)
 }
+
+
+def set_shape_attributes(shape, table):
+    for row in table:
+        if row['variable'] == 'material.color' and row['value'] == '(1, 0, 0)':
+            shape.material.color = color(1, 0, 0)
+            print(f'color={shape.material.color}')
+
+        if row['variable'] == 'material.ambient':
+            shape.material.ambient = float(row['value'])
+            print(f'ambient={shape.material.ambient}')
+
+        if row['variable'] == 'material.transparency':
+            shape.material.transparency = float(row['value'])
+            print(f'transparency={shape.material.transparency}')
+
+        if row['variable'] == 'material.reflective':
+            shape.material.reflective = float(row['value'])
+            print(f'reflective={shape.material.reflective}')
+
+        if row['variable'] == 'material.refractive_index':
+            shape.material.refractive_index = float(row['value'])
+            print(f'refractive_index={shape.material.refractive_index}')
+
+        if row['variable'] == 'transform':
+            shape.set_transform(TRANSFORMATIONS.get(row['value']))
 
 
 @given(u'w <- world()')
@@ -36,20 +63,13 @@ def step_create_sphere_s1_with(context):
 @given(u's2 <- sphere() with')
 def step_create_sphere_s2_with(context):
     context.s2 = Sphere()
-    first_row = context.table[0]
-    if first_row['variable'] == 'transform':
-        context.s2.set_transform(TRANSFORMATIONS.get(first_row['value']))
+    set_shape_attributes(context.s2, context.table)
 
 
 @given(u'p <- plane() with')
 def step_create_plane_p_with(context):
     context.p = Plane()
-    for row in context.table:
-        if row['variable'] == 'material.reflective':
-            context.p.material.reflective = float(row['value'])
-
-        if row['variable'] == 'transform':
-            context.p.set_transform(TRANSFORMATIONS.get(row['value']))
+    set_shape_attributes(context.p, context.table)
 
 
 @given(u'p2 <- plane() with')
@@ -90,7 +110,7 @@ def step_add_s_to_w(context):
 
 @given(u's2 is added to w')
 def step_add_s2_to_w(context):
-    context.w.objects.append(context.s)
+    context.w.objects.append(context.s2)
 
 
 @given(u'p is added to w')
@@ -113,6 +133,11 @@ def step_set_c_to_shade_hit_w_shape_hit(context):
     context.c = context.w.shade_hit(context.shape_hit)
 
 
+@when(u'c <- shade_hit(w, shape_hit, {remaining:d})')
+def step_set_c_to_shade_hit_w_shape_hit_with_remaining(context, remaining):
+    context.c = context.w.shade_hit(context.shape_hit, remaining)
+
+
 @when(u'xs <- intersect_world(w, r)')
 def step_set_xs_to_intersect_world_w_r(context):
     context.xs = context.w.intersect(context.r)
@@ -131,6 +156,11 @@ def step_set_c_to_reflected_color_w_shape_hit(context):
 @when(u'c <- reflected_color(w, shape_hit, {remaining:d})')
 def step_set_c_to_reflected_color_w_shape_hit(context, remaining):
     context.c = context.w.reflected_color(context.shape_hit, remaining)
+
+
+@when(u'c <- refracted_color(w, shape_hit, {remaining:d})')
+def step_impl(context, remaining):
+    context.c = context.w.refracted_color(context.shape_hit, remaining)
 
 
 @then(u'w contains no objects')

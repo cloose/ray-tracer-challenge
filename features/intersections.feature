@@ -48,13 +48,3 @@ Scenario: The hit is always the lowest nonnegative intersection
   And xs <- intersections(i1, i2, i3, i4)
   When i <- hit(xs)
   Then i = i4
-
-Scenario: The hit should offset the point
-  Given r <- ray(point(0, 0, -5), vector(0, 0, 1))
-  And s2 <- sphere() with:
-    | variable  | value                |
-    | transform | translation(0, 0, 1) |
-  And i1 <- intersection(5, s2)
-  When shape_hit <- hit(i1, r)
-  Then shape_hit.over_point.z < -EPSILON/2
-  And shape_hit.point.z > shape_hit.over_point.z

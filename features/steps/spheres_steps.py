@@ -5,13 +5,89 @@ from tuples import point, vector
 from shape import Shape
 from sphere import Sphere
 from matrix import identity_matrix, multiply
-from transformations import scaling, rotation_z
+from transformations import translation, scaling, rotation_z
 from material import Material
+from patterns_steps import TestPattern
+
+TRANSFORMATIONS = {
+    'scaling(2, 2, 2)': scaling(2, 2, 2),
+    'translation(0, 0, 0.25)': translation(0, 0, 0.25),
+    'translation(0, 0, -0.25)': translation(0, 0, -0.25),
+    'translation(0, 0, 1)': translation(0, 0, 1),
+}
+
+
+def glass_sphere():
+    sphere = Sphere()
+    sphere.material.transparency = 1.0
+    sphere.material.refractive_index = 1.5
+    return sphere
+
+
+def set_sphere_attributes(sphere, table):
+    for row in table:
+        if row['variable'] == 'material.ambient':
+            sphere.material.ambient = float(row['value'])
+            print(f'ambient={sphere.material.ambient}')
+
+        if row['variable'] == 'material.transparency':
+            sphere.material.transparency = float(row['value'])
+            print(f'transparency={sphere.material.transparency}')
+
+        if row['variable'] == 'material.refractive_index':
+            sphere.material.refractive_index = float(row['value'])
+            print(f'refractive_index={sphere.material.refractive_index}')
+
+        if row['variable'] == 'material.pattern':
+            sphere.material.pattern = TestPattern()
+            print('pattern')
+
+        if row['variable'] == 'transform':
+            sphere.set_transform(TRANSFORMATIONS.get(row['value']))
 
 
 @given(u's <- sphere()')
 def step_create_sphere_s(context):
     context.s = Sphere()
+
+
+@given(u's <- glass_sphere()')
+def step_create_glass_sphere_s(context):
+    context.s = glass_sphere()
+
+
+@given(u's2 <- glass_sphere() with')
+def step_create_glass_sphere_s2_with(context):
+    context.s2 = glass_sphere()
+    set_sphere_attributes(context.s2, context.table)
+
+
+@given(u'A <- glass_sphere() with')
+def step_create_glass_sphere_a_with(context):
+    context.A = glass_sphere()
+    set_sphere_attributes(context.A, context.table)
+
+
+@given(u'B <- glass_sphere() with')
+def step_create_glass_sphere_b_with(context):
+    context.B = glass_sphere()
+    set_sphere_attributes(context.B, context.table)
+
+
+@given(u'C <- glass_sphere() with')
+def step_create_glass_sphere_c_with(context):
+    context.C = glass_sphere()
+    set_sphere_attributes(context.C, context.table)
+
+
+@given(u's1 has')
+def step_set_attributes_of_sphere_s1(context):
+    set_sphere_attributes(context.s1, context.table)
+
+
+@given(u's2 has')
+def step_set_attributes_of_sphere_s2(context):
+    set_sphere_attributes(context.s2, context.table)
 
 
 @when(u'set_transform(s, B)')
@@ -41,7 +117,7 @@ def step_assign_local_normal_of_s_at_certain_point_to_n(context):
 
 
 @then(u's is a shape')
-def step_impl(context):
+def step_assert_s_is_a_shape(context):
     assert isinstance(context.s, Shape)
 
 
@@ -82,3 +158,13 @@ def step_assert_n_equals_vector(context, x, y, z):
 def step_assert_n_equals_certain_vector(context):
     xyz = sqrt(3) / 3
     assert_tuple(context.n, vector(xyz, xyz, xyz))
+
+
+@then(u's.material.transparency = {expected:g}')
+def step_assert_transparency_of_s_material(context, expected):
+    assert_float(context.s.material.transparency, expected)
+
+
+@then(u's.material.refractive_index = {expected:g}')
+def step_assert_refractive_index_of_s_material(context, expected):
+    assert_float(context.s.material.refractive_index, expected)

@@ -129,7 +129,7 @@ Scenario: The reflected color for a reflective material
   And i1 <- intersection(sqrt(2), p)
   When shape_hit <- hit(i1, r)
   And c <- reflected_color(w, shape_hit)
-  #Then c = color(0.19032, 0.2379, 0.14274)
+  # book: Then c = color(0.19032, 0.2379, 0.14274)
   Then c = color(0.19033, 0.23791, 0.14274)
 
 Scenario: shade_hit() with a reflective material
@@ -143,7 +143,7 @@ Scenario: shade_hit() with a reflective material
   And i1 <- intersection(sqrt(2), p)
   When shape_hit <- hit(i1, r)
   And c <- shade_hit(w, shape_hit)
-  #Then c = color(0.87677, 0.92436, 0.82918)
+  # book: Then c = color(0.87677, 0.92436, 0.82918)
   Then c = color(0.87675, 0.92434, 0.82918)
 
 Scenario: color_at() with mutually reflective surfaces
@@ -175,4 +175,80 @@ Scenario: The reflected color at the maximum recursive depth
   When shape_hit <- hit(i1, r)
   And c <- reflected_color(w, shape_hit, 0)
   Then c = color(0, 0, 0)
+
+Scenario: The refracted color with an opaque surface
+  Given w <- default_world()
+  And s1 <- the first object in w
+  And r <- ray(point(0, 0, -5), vector(0, 0, 1))
+  And xs <- intersections(4:s1, 6:s1)
+  When shape_hit <- hit(xs[0], r, xs)
+  And c <- refracted_color(w, shape_hit, 5)
+  Then c = color(0, 0, 0)
+
+Scenario: The refracted color at the maximum recursive depth
+  Given w <- default_world()
+  And s1 <- the first object in w
+  And s1 has:
+    | variable  | value                 |
+    | material.transparency | 1.0 |
+    | material.refractive_index | 1.5 |
+  And r <- ray(point(0, 0, -5), vector(0, 0, 1))
+  And xs <- intersections(4:s1, 6:s1)
+  When shape_hit <- hit(xs[0], r, xs)
+  And c <- refracted_color(w, shape_hit, 0)
+  Then c = color(0, 0, 0)
+
+Scenario: The refracted color under total internal reflection
+  Given w <- default_world()
+  And s1 <- the first object in w
+  And s1 has:
+    | variable  | value                 |
+    | material.transparency | 1.0 |
+    | material.refractive_index | 1.5 |
+  And r <- ray(point(0, 0, sqrt(2)/2), vector(0, 1, 0))
+  And xs <- intersections(-sqrt(2)/2:s1, sqrt(2)/2:s1)
+  # NOTE: this time you're inside the sphere, so you need
+  # to look at the second intersection, xs[1], not xs[0]
+  When shape_hit <- hit(xs[1], r, xs)
+  And c <- refracted_color(w, shape_hit, 5)
+  Then c = color(0, 0, 0)
+
+Scenario: The refracted color with a refracted ray
+  Given w <- default_world()
+  And s1 <- the first object in w
+  And s1 has:
+    | variable  | value                 |
+    | material.ambient | 1.0 |
+    | material.pattern | test_pattern() |
+  And s2 <- the second object in w
+  And s2 has:
+    | variable  | value                 |
+    | material.transparency | 1.0 |
+    | material.refractive_index | 1.5 |
+  And r <- ray(point(0, 0, 0.1), vector(0, 1, 0))
+  And xs <- intersections(-0.9899:s1, -0.4899:s2, 0.4899:s2, 0.9899:s1)
+  When shape_hit <- hit(xs[2], r, xs)
+  And c <- refracted_color(w, shape_hit, 5)
+  # book: Then c = color(0, 0.99888, 0.04725)
+  Then c = color(0, 0.99888, 0.04722)
+
+Scenario: shade_hit() with a transparent material
+  Given w <- default_world()
+  And p <- plane() with:
+    | variable  | value                 |
+    | transform | translation(0, -1, 0) |
+    | material.transparency | 0.5 |
+    | material.refractive_index | 1.5 |
+  And p is added to w
+  And s2 <- sphere() with:
+    | variable  | value                 |
+    | material.color | (1, 0, 0) |
+    | material.ambient | 0.5 |
+    | transform | translation(0, -3.5, -0.5) |
+  And s2 is added to w
+  And r <- ray(point(0, 0, -3), vector(0, -sqrt(2)/2, sqrt(2)/2))
+  And xs <- intersections(sqrt(2):p)
+  When shape_hit <- hit(xs[0], r, xs)
+  And c <- shade_hit(w, shape_hit, 5)
+  Then c = color(0.93642, 0.68642, 0.68642)
 

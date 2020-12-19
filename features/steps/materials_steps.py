@@ -43,7 +43,7 @@ def step_create_vector_v1_reflection(context):
 
 
 @when(u'c <- lighting(m, s, light, p, v1, v2)')
-def step_impl(context):
+def step_set_c_to_calculated_lighting(context):
     context.c = lighting(context.m, context.s, context.light, context.p,
                          context.v1, context.v2)
 
@@ -94,6 +94,16 @@ def step_assert_shininess_of_m(context, expected):
 @then(u'm.reflective = {expected:g}')
 def step_assert_reflective_of_m(context, expected):
     assert_float(context.m.reflective, expected)
+
+
+@then(u'm.transparency = {expected:g}')
+def step_assert_transparency_of_m(context, expected):
+    assert_float(context.m.transparency, expected)
+
+
+@then(u'm.refractive_index = {expected:g}')
+def step_assert_refractive_index_of_m(context, expected):
+    assert_float(context.m.refractive_index, expected)
 
 
 @then(u'c1 = color({red:g}, {green:g}, {blue:g})')

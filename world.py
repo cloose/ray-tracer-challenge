@@ -1,4 +1,5 @@
-from tuples import point, color, add, subtract, magnitude, normalize, multiply
+from math import sqrt
+from tuples import point, color, add, subtract, magnitude, normalize, multiply, dot
 from transformations import scaling
 from lights import PointLight
 from sphere import Sphere
@@ -43,8 +44,9 @@ class World:
                            hit.point, hit.eyev, hit.normalv, shadowed)
 
         reflected = self.reflected_color(hit, remaining)
+        refracted = self.refracted_color(hit, remaining)
 
-        return add(surface, reflected)
+        return add(add(surface, reflected), refracted)
 
     def color_at(self, ray, remaining=5):
         intersections = self.intersect(ray)
@@ -66,6 +68,31 @@ class World:
         reflect_ray = Ray(hit.over_point, hit.reflectv)
         reflect_color = self.color_at(reflect_ray, remaining - 1)
         return multiply(reflect_color, hit.object.material.reflective)
+
+    def refracted_color(self, hit, remaining=5):
+        """"""
+        if remaining <= 0:
+            return color(0, 0, 0)
+
+        if hit.object.material.transparency == 0.0:
+            return color(0, 0, 0)
+
+        n_ratio = hit.n1 / hit.n2
+        cos_i = dot(hit.eyev, hit.normalv)
+        sin2_t = n_ratio**2 * (1 - cos_i**2)
+
+        if sin2_t > 1.0:
+            return color(0, 0, 0)
+
+        cos_t = sqrt(1.0 - sin2_t)
+
+        direction = subtract(multiply(hit.normalv, (n_ratio * cos_i - cos_t)),
+                             multiply(hit.eyev, n_ratio))
+
+        refract_ray = Ray(hit.under_point, direction)
+
+        return multiply(self.color_at(refract_ray, remaining - 1),
+                        hit.object.material.transparency)
 
     def is_shadowed(self, point):
         vec = subtract(self.light.position, point)

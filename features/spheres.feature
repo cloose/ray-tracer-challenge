@@ -88,3 +88,8 @@ Scenario: The normal on a sphere at a nonaxial point
   When n <- local_normal_at(s, point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3))
   Then n = vector(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3)
 
+Scenario: A helper for producing a sphere with a glassy material
+  Given s <- glass_sphere()
+  Then s.transform = identity_matrix
+  And s.material.transparency = 1.0
+  And s.material.refractive_index = 1.5

@@ -2,8 +2,6 @@ from math import sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from intersection import Intersection, hit
 
-_EPSILON = 0.00001
-
 
 @given(u'i1 <- intersection({t:g}, s)')
 def step_impl(context, t):
@@ -40,6 +38,11 @@ def step_impl(context, t):
     context.i4 = Intersection(t, context.s)
 
 
+@given(u'xs <- intersections(i1)')
+def step_create_intersections_xs_with_i1(context):
+    context.xs = [context.i1]
+
+
 @given(u'xs <- intersections(i2, i1)')
 def step_impl(context):
     context.xs = [context.i2, context.i1]
@@ -48,6 +51,46 @@ def step_impl(context):
 @given(u'xs <- intersections(i1, i2, i3, i4)')
 def step_impl(context):
     context.xs = [context.i1, context.i2, context.i3, context.i4]
+
+
+@given(u'xs <- intersections(2:A, 2.75:B, 3.25:C, 4.75:B, 5.25:C, 6:A)')
+def step_create_intersections_xs_from_a_b_c(context):
+    context.xs = [
+        Intersection(2, context.A),
+        Intersection(2.75, context.B),
+        Intersection(3.25, context.C),
+        Intersection(4.75, context.B),
+        Intersection(5.25, context.C),
+        Intersection(6.0, context.A)
+    ]
+
+
+@given(u'xs <- intersections(4:s1, 6:s1)')
+def step_impl(context):
+    context.xs = [Intersection(4, context.s1), Intersection(6, context.s1)]
+
+
+@given(u'xs <- intersections(-sqrt(2)/2:s1, sqrt(2)/2:s1)')
+def step_impl(context):
+    context.xs = [
+        Intersection(-sqrt(2) / 2, context.s1),
+        Intersection(sqrt(2) / 2, context.s1)
+    ]
+
+
+@given(u'xs <- intersections(-0.9899:s1, -0.4899:s2, 0.4899:s2, 0.9899:s1)')
+def step_impl(context):
+    context.xs = [
+        Intersection(-0.9899, context.s1),
+        Intersection(-0.4899, context.s2),
+        Intersection(0.4899, context.s2),
+        Intersection(0.9899, context.s1)
+    ]
+
+
+@given(u'xs <- intersections(sqrt(2):p)')
+def step_impl(context):
+    context.xs = [Intersection(sqrt(2), context.p)]
 
 
 @when(u'i <- intersection({t:g}, s)')
@@ -93,14 +136,3 @@ def step_impl(context):
 @then(u'i = i4')
 def step_impl(context):
     assert context.i == context.i4, f"{context.i} is not {context.i4}"
-
-
-@then(u'shape_hit.over_point.z < -EPSILON/2')
-def step_assert_over_point_z_less_than_negative_half_epsilon(context):
-    assert context.shape_hit.over_point[2] < -(_EPSILON / 2), \
-            f"{context.shape_hit.over_point[2]} is not less than {-(_EPSILON/2)}"
-
-
-@then(u'shape_hit.point.z > shape_hit.over_point.z')
-def step_assert_point_z_greater_than_over_point_z(context):
-    assert context.shape_hit.point[2] > context.shape_hit.over_point[2]
