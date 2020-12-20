@@ -252,3 +252,25 @@ Scenario: shade_hit() with a transparent material
   And c <- shade_hit(w, shape_hit, 5)
   Then c = color(0.93642, 0.68642, 0.68642)
 
+
+Scenario: shade_hit() with a reflective, transparent material
+  Given w <- default_world()
+  And r <- ray(point(0, 0, -3), vector(0, -sqrt(2)/2, sqrt(2)/2))
+  And p <- plane() with:
+    | variable  | value                 |
+    | transform | translation(0, -1, 0) |
+    | material.reflective | 0.5 |
+    | material.transparency | 0.5 |
+    | material.refractive_index | 1.5 |
+  And p is added to w
+  And s2 <- sphere() with:
+    | variable  | value                 |
+    | material.color | (1, 0, 0) |
+    | material.ambient | 0.5 |
+    | transform | translation(0, -3.5, -0.5) |
+  And s2 is added to w
+  And xs <- intersections(sqrt(2):p)
+  When shape_hit <- hit(xs[0], r, xs)
+  And c <- shade_hit(w, shape_hit, 5)
+  Then c = color(0.93391, 0.69643, 0.69243)
+

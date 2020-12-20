@@ -84,3 +84,28 @@ Scenario Outline: Finding n1 and n2 at various intersections
     | 3 | 2.5 | 2.5 |
     | 4 | 2.5 | 1.5 |
     | 5 | 1.5 | 1.0 |
+
+Scenario: The Schlick approximation under total internal reflection
+  Given s <- glass_sphere()
+  And r <- ray(point(0, 0, sqrt(2)/2), vector(0, 1, 0))
+  And xs <- intersections(-sqrt(2)/2:s, sqrt(2)/2:s)
+  When shape_hit <- hit(xs[1], r, xs)
+  And reflectance <- schlick(shape_hit)
+  Then reflectance = 1.0
+
+Scenario: The Schlick approximation with a perpendicular viewing angle
+  Given s <- glass_sphere()
+  And r <- ray(point(0, 0, 0), vector(0, 1, 0))
+  And xs <- intersections(-1:s, 1:s)
+  When shape_hit <- hit(xs[1], r, xs)
+  And reflectance <- schlick(shape_hit)
+  Then reflectance = 0.04
+
+Scenario: The Schlick approximation with small angle and n2 > n1
+  Given s <- glass_sphere()
+  And r <- ray(point(0, 0.99, -2), vector(0, 0, 1))
+  And xs <- intersections(1.8589:s)
+  When shape_hit <- hit(xs[0], r, xs)
+  And reflectance <- schlick(shape_hit)
+  Then reflectance = 0.48873
+

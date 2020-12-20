@@ -17,7 +17,7 @@ def step_create_vector_direction(context, x, y, z):
 
 @given(
     u'r <- ray(point({ox:g}, {oy:g}, {oz:g}), vector({dx:g}, {dy:g}, {dz:g}))')
-def step_impl(context, ox, oy, oz, dx, dy, dz):
+def step_create_ray_with_point_and_direction(context, ox, oy, oz, dx, dy, dz):
     context.r = Ray(point(ox, oy, oz), vector(dx, dy, dz))
 
 
@@ -66,7 +66,7 @@ def step_impl(context, t, x, y, z):
 
 
 @then(u'r2.origin = point({x:g}, {y:g}, {z:g})')
-def step_impl(context, x, y, z):
+def step_assert_r2_origin_is_equal_to_point(context, x, y, z):
     actual = context.r2.origin
     expected = point(x, y, z)
     assert_tuple(actual, expected)

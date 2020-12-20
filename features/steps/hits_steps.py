@@ -22,6 +22,11 @@ def step_assign_hit_at_i1_r_to_shape_hit(context):
     context.shape_hit = Hit(context.i1, context.r, context.xs)
 
 
+@when(u'reflectance <- schlick(shape_hit)')
+def step_calculate_reflectance_at_shape_hit(context):
+    context.reflectance = context.shape_hit.schlick()
+
+
 @then(u'shape_hit.t = i1.t')
 def step_assert_shape_hit_t_equals_i1_t(context):
     assert_float(context.shape_hit.t, context.i1.t)
@@ -89,3 +94,8 @@ def step_assert_shape_hit_n1(context, expected):
 @then(u'shape_hit.n2 = {expected:g}')
 def step_assert_shape_hit_n2(context, expected):
     assert_float(context.shape_hit.n2, expected)
+
+
+@then(u'reflectance = {expected:g}')
+def step_assert_reflectance(context, expected):
+    assert_float(context.reflectance, expected)

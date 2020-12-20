@@ -2,6 +2,48 @@ from math import sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from intersection import Intersection, hit
 
+INTERSECTION_BY_NAME = {
+    'i1': lambda context: context.i1,
+    'i2': lambda context: context.i2,
+    'i3': lambda context: context.i3,
+    'i4': lambda context: context.i4,
+}
+
+OBJECT_BY_NAME = {
+    's': lambda context: context.s,
+    's1': lambda context: context.s1,
+    's2': lambda context: context.s2,
+    'p': lambda context: context.p,
+    'A': lambda context: context.A,
+    'B': lambda context: context.B,
+    'C': lambda context: context.C,
+}
+
+
+def create_intersections_from_string(context, intersections):
+    result = []
+
+    for part in intersections.split(','):
+        part = part.strip()
+        if ':' in part:
+            (pos, obj) = part.split(':')
+            if pos == 'sqrt(2)/2':
+                pos_num = sqrt(2) / 2
+            elif pos == '-sqrt(2)/2':
+                pos_num = -sqrt(2) / 2
+            elif pos == 'sqrt(2)':
+                pos_num = sqrt(2)
+            else:
+                pos_num = float(pos)
+            result.append(
+                Intersection(pos_num,
+                             OBJECT_BY_NAME.get(obj)(context)))
+        else:
+            print(part)
+            result.append(INTERSECTION_BY_NAME.get(part)(context))
+
+    return result
+
 
 @given(u'i1 <- intersection({t:g}, s)')
 def step_impl(context, t):
@@ -38,59 +80,11 @@ def step_impl(context, t):
     context.i4 = Intersection(t, context.s)
 
 
-@given(u'xs <- intersections(i1)')
-def step_create_intersections_xs_with_i1(context):
-    context.xs = [context.i1]
-
-
-@given(u'xs <- intersections(i2, i1)')
-def step_impl(context):
-    context.xs = [context.i2, context.i1]
-
-
-@given(u'xs <- intersections(i1, i2, i3, i4)')
-def step_impl(context):
-    context.xs = [context.i1, context.i2, context.i3, context.i4]
-
-
-@given(u'xs <- intersections(2:A, 2.75:B, 3.25:C, 4.75:B, 5.25:C, 6:A)')
-def step_create_intersections_xs_from_a_b_c(context):
-    context.xs = [
-        Intersection(2, context.A),
-        Intersection(2.75, context.B),
-        Intersection(3.25, context.C),
-        Intersection(4.75, context.B),
-        Intersection(5.25, context.C),
-        Intersection(6.0, context.A)
-    ]
-
-
-@given(u'xs <- intersections(4:s1, 6:s1)')
-def step_impl(context):
-    context.xs = [Intersection(4, context.s1), Intersection(6, context.s1)]
-
-
-@given(u'xs <- intersections(-sqrt(2)/2:s1, sqrt(2)/2:s1)')
-def step_impl(context):
-    context.xs = [
-        Intersection(-sqrt(2) / 2, context.s1),
-        Intersection(sqrt(2) / 2, context.s1)
-    ]
-
-
-@given(u'xs <- intersections(-0.9899:s1, -0.4899:s2, 0.4899:s2, 0.9899:s1)')
-def step_impl(context):
-    context.xs = [
-        Intersection(-0.9899, context.s1),
-        Intersection(-0.4899, context.s2),
-        Intersection(0.4899, context.s2),
-        Intersection(0.9899, context.s1)
-    ]
-
-
-@given(u'xs <- intersections(sqrt(2):p)')
-def step_impl(context):
-    context.xs = [Intersection(sqrt(2), context.p)]
+@given(u'xs <- intersections({intersection_list})')
+def step_create_intersections_xs_from_list(context, intersection_list):
+    intersections = create_intersections_from_string(context,
+                                                     intersection_list)
+    context.xs = intersections
 
 
 @when(u'i <- intersection({t:g}, s)')

@@ -1,3 +1,4 @@
+from math import sqrt
 from tuples import negate, dot, add, subtract, multiply, reflect
 
 
@@ -45,3 +46,24 @@ class Hit:
                 else:
                     self.n2 = containers[-1].material.refractive_index
                 break
+
+    def schlick(self):
+        """"""
+        # find the cosine of the angle between the eye and normal vectors
+        cos = dot(self.eyev, self.normalv)
+
+        # total internal reflection can only occur if n1 > n2
+        if self.n1 > self.n2:
+            n_ratio = self.n1 / self.n2
+            sin2_t = n_ratio**2 * (1.0 - cos**2)
+            if sin2_t > 1.0:
+                return 1.0
+
+            # compute cosine of theta_t
+            cos_t = sqrt(1.0 - sin2_t)
+
+            # when n1>n2 use cosine of theta_t instead
+            cos = cos_t
+
+        r0 = ((self.n1 - self.n2) / (self.n1 + self.n2))**2
+        return r0 + (1.0 - r0) * (1 - cos)**5

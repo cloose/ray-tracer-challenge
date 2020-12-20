@@ -46,6 +46,11 @@ class World:
         reflected = self.reflected_color(hit, remaining)
         refracted = self.refracted_color(hit, remaining)
 
+        material = hit.object.material
+        if material.reflective > 0 and material.transparency > 0:
+            reflectance = hit.schlick()
+            return add(add(surface, multiply(reflected, reflectance)),
+                       multiply(refracted, (1 - reflectance)))
         return add(add(surface, reflected), refracted)
 
     def color_at(self, ray, remaining=5):
@@ -54,7 +59,7 @@ class World:
         if hit_intersection is None:
             return color(0, 0, 0)
 
-        shape_hit = Hit(hit_intersection, ray)
+        shape_hit = Hit(hit_intersection, ray, intersections)
         return self.shade_hit(shape_hit, remaining)
 
     def reflected_color(self, hit, remaining=5):

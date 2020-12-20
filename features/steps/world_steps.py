@@ -20,23 +20,18 @@ def set_shape_attributes(shape, table):
     for row in table:
         if row['variable'] == 'material.color' and row['value'] == '(1, 0, 0)':
             shape.material.color = color(1, 0, 0)
-            print(f'color={shape.material.color}')
 
         if row['variable'] == 'material.ambient':
             shape.material.ambient = float(row['value'])
-            print(f'ambient={shape.material.ambient}')
 
         if row['variable'] == 'material.transparency':
             shape.material.transparency = float(row['value'])
-            print(f'transparency={shape.material.transparency}')
 
         if row['variable'] == 'material.reflective':
             shape.material.reflective = float(row['value'])
-            print(f'reflective={shape.material.reflective}')
 
         if row['variable'] == 'material.refractive_index':
             shape.material.refractive_index = float(row['value'])
-            print(f'refractive_index={shape.material.refractive_index}')
 
         if row['variable'] == 'transform':
             shape.set_transform(TRANSFORMATIONS.get(row['value']))
