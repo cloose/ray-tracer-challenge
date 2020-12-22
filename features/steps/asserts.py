@@ -15,5 +15,16 @@ def assert_tuple(actual, expected):
                 f"error at index {val}: {actual} is not {expected}"
 
 
+def assert_matrix(actual, expected):
+    """Asserts that two matrices are equal."""
+    rows = len(expected)
+    columns = len(expected[0])
+
+    for row in range(rows):
+        for column in range(columns):
+            assert equal(actual[row][column], expected[row][column]), \
+                    f"error at position {row},{column}: {actual} is not {expected}"
+
+
 def equal(left, right):
     return abs(left - right) < _EPSILON

@@ -1,6 +1,6 @@
 from math import pi, sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
-from asserts import assert_tuple
+from asserts import assert_tuple, assert_matrix
 from tuples import point, vector, normalize
 from matrix import identity_matrix, multiply
 from transformations import translation, scaling, rotation_z
@@ -74,12 +74,12 @@ def step_assign_normal_of_s_at_another_point_to_n(context):
 
 @then(u's.transform = identity_matrix')
 def step_assert_transform_of_s_equals_identity_matrix(context):
-    assert context.s.transform() == identity_matrix()
+    assert_matrix(context.s.transform(), identity_matrix())
 
 
-@then(u's.transform = translation(2, 3, 4)')
-def step_assert_transform_of_s_equals_translation(context):
-    assert context.s.transform() == translation(2, 3, 4)
+@then(u's.transform = translation({x:g}, {y:g}, {z:g})')
+def step_assert_transform_of_s_equals_translation(context, x, y, z):
+    assert_matrix(context.s.transform(), translation(x, y, z))
 
 
 @then(u's.material = material()')
