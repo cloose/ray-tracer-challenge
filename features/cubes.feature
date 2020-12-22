@@ -1,5 +1,18 @@
 Feature: Cubes
 
+  Scenario: Creating a cube from yaml
+    Given data <- yaml:
+    """"
+    add: cube
+    transform:
+      - [ translate, 0, 5, 0 ]
+    material:
+      color: [1, 0.3, 0.2]
+    """"
+    When s <- Cube.from_yaml(data)
+    Then s.transform = translation(0, 5, 0)
+    And s.material.color = color(1, 0.3, 0.2)
+
   Scenario Outline: A ray intersects a cube
     Given c <- cube()
     And r <- ray(<origin>, <direction>)

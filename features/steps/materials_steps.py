@@ -42,6 +42,11 @@ def step_create_vector_v1_reflection(context):
     context.v1 = vector(0, -sqrt(2) / 2, -sqrt(2) / 2)
 
 
+@when(u'm <- Material.from_yaml(data)')
+def step_create_material_m_from_yaml(context):
+    context.m = Material.from_yaml(context.data)
+
+
 @when(u'c <- lighting(m, s, light, p, v1, v2)')
 def step_set_c_to_calculated_lighting(context):
     context.c = lighting(context.m, context.s, context.light, context.p,

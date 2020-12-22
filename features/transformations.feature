@@ -107,6 +107,18 @@ Scenario: Chained transformations must be applied in reverse order
   When transform <- C * B * full_quarter
   Then transform * p = point(15, 0, 7)
 
+Scenario: Creating chained transformations from yaml
+  Given p <- point(1, 0, 1)
+  And data <- yaml:
+  """
+  transform:
+    - [ rotate-x, 1.57079632679 ]
+    - [ scale, 5, 5, 5 ]
+    - [ translate, 10, 5, 7 ]
+    """
+  When transform <- from_yaml(data) 
+  Then transform * p = point(15, 0, 7)
+
 Scenario: The transformation matrix for the default orientation
   Given p <- point(0, 0, 0)
   And to <- point(0, 0, -1)
@@ -139,4 +151,3 @@ Scenario: An arbitrary view transformation
     |  0.76772 | 0.60609 |  0.12122 | -2.82843 |
     | -0.35857 | 0.59761 | -0.71714 |  0.00000 |
     |  0.00000 | 0.00000 |  0.00000 |  1.00000 |
-

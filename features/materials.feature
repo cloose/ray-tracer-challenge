@@ -13,6 +13,21 @@ Scenario: The default material
   And m.specular = 0.9
   And m.shininess = 200.0
 
+Scenario: Creating a material from yaml
+  Given data <- yaml:
+  """"
+  material:
+    color: [0.9, 0.4, 0.6]
+    ambient: 0.2
+    diffuse: 0.1
+    specular: 0.3
+  """"
+  When m <- Material.from_yaml(data)
+  Then m.color = color(0.9, 0.4, 0.6)
+  And m.ambient = 0.2
+  And m.diffuse = 0.1
+  And m.specular = 0.3
+
 Scenario: Lighting with the eye between the light and the surface
   Given v1 <- vector(0, 0, -1)
   And v2 <- vector(0, 0, -1)

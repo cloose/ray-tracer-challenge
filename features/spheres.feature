@@ -4,6 +4,19 @@ Scenario: A sphere is a shape
   Given s <- sphere()
   Then s is a shape
 
+Scenario: Creating a sphere from yaml
+  Given data <- yaml:
+  """"
+  add: sphere
+  transform:
+    - [ translate, 0, 5, 0 ]
+  material:
+    color: [1, 0.3, 0.2]
+  """"
+  When s <- Sphere.from_yaml(data)
+  Then s.transform = translation(0, 5, 0)
+    And s.material.color = color(1, 0.3, 0.2)
+
 Scenario: A ray intersects a sphere at two points
   Given r <- ray(point(0, 0, -5), vector(0, 0, 1))
   And s <- sphere()

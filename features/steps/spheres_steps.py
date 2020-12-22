@@ -90,6 +90,11 @@ def step_set_attributes_of_sphere_s2(context):
     set_sphere_attributes(context.s2, context.table)
 
 
+@when(u's <- Sphere.from_yaml(data)')
+def step_create_sphere_s_from_yaml(context):
+    context.s = Sphere.from_yaml(context.data)
+
+
 @when(u'set_transform(s, B)')
 def step_set_transform_of_s_to_b(context):
     context.s.set_transform(context.B)

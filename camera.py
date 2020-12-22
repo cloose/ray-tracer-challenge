@@ -1,6 +1,7 @@
 from math import tan
-from tuples import point, normalize, subtract
+from tuples import point, vector, normalize, subtract
 from matrix import identity_matrix, inverse, multiply_tuple
+from transformations import view_transform
 from rays import Ray
 
 
@@ -23,6 +24,22 @@ class Camera:
             self.half_height = half_view
 
         self.pixel_size = (self.half_width * 2) / self.horizontal_size_px
+
+    @classmethod
+    def from_yaml(cls, data):
+        camera = cls(data['width'], data['height'], data['field-of-view'])
+
+        values = data['from']
+        from_pos = point(values[0], values[1], values[2])
+
+        values = data['to']
+        to_pos = point(values[0], values[1], values[2])
+
+        values = data['up']
+        up_vector = vector(values[0], values[1], values[2])
+
+        camera.set_transform(view_transform(from_pos, to_pos, up_vector))
+        return camera
 
     def set_transform(self, transformation_matrix):
         self.__transform = transformation_matrix

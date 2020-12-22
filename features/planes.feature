@@ -1,5 +1,19 @@
 Feature: planes
 
+Scenario: Creating a plane from yaml
+  Given data <- yaml:
+  """"
+  add: plane
+  transform:
+    - [ translate, 0, 5, 0 ]
+  material:
+    color: [1, 0.3, 0.2]
+  """"
+  When s <- Plane.from_yaml(data)
+  Then s.transform = translation(0, 5, 0)
+  And s.material.color = color(1, 0.3, 0.2)
+
+
 Scenario: The normal of a plane is constant everywhere
   Given p <- plane()
   When n1 <- local_normal_at(p, point(0, 0, 0))

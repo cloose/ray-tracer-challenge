@@ -3,6 +3,7 @@ from tuples import vector, normalize
 from matrix import identity_matrix, inverse, multiply_tuple, transpose
 from material import Material
 from intersection import Intersection
+from transformations import transform_from_yaml
 
 
 class Shape:
@@ -49,6 +50,18 @@ class Cube(Shape):
 
     def __init__(self):
         super().__init__()
+
+    @classmethod
+    def from_yaml(cls, data):
+        cube = cls()
+
+        if 'transform' in data:
+            cube.set_transform(transform_from_yaml(data))
+
+        if 'material' in data:
+            cube.material = Material.from_yaml(data)
+
+        return cube
 
     def local_intersect(self, local_ray):
         xtmin, xtmax = self.check_axis(local_ray.origin[0],

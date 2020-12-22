@@ -19,6 +19,11 @@ def step_assign_local_normal_for_cube_at_point_to_normal(context):
     context.normal = context.c.local_normal_at(context.p)
 
 
+@when(u's <- Cube.from_yaml(data)')
+def step_create_cube_s_from_yaml(context):
+    context.s = Cube.from_yaml(context.data)
+
+
 @then(u'normal = vector({x:g}, {y:g}, {z:g})')
 def step_assert_normal_equals_vector(context, x, y, z):
     assert_tuple(context.normal, vector(x, y, z))

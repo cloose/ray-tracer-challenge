@@ -7,6 +7,26 @@ Scenario: Constructing a camera
   And c.field_of_view = pi/2
   And c.transform = identity_matrix
 
+Scenario: Creating a camera from yaml
+  Given data <- yaml:
+  """
+  add: camera
+  width: 160
+  height: 120
+  field-of-view: 1.570796
+  from: [0, 0, -5]
+  to: [0, 0.5, 0]
+  up: [0, 1, 0]
+  """
+  And p <- point(0, 0, -5)
+  And to <- point(0, 0.5, 0)
+  And up <- vector(0, 1, 0)
+  When c <- Camera.from_yaml(data)
+  Then c.hsize = 160
+  And c.vsize = 120
+  And c.field_of_view = pi/2
+  And c.transform = view_transform(p, to, up)
+
 Scenario: The pixel size for a horizontal canvas
   Given c <- camera(200, 125, pi/2)
   Then c.pixel_size = 0.01

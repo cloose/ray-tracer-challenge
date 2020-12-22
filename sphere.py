@@ -1,12 +1,26 @@
 from math import sqrt
 from tuples import point, subtract, dot
+from transformations import transform_from_yaml
+from material import Material
 from intersection import Intersection
 from shape import Shape
 
 
 class Sphere(Shape):
     def __init__(self):
-        Shape.__init__(self)
+        super().__init__()
+
+    @classmethod
+    def from_yaml(cls, data):
+        sphere = cls()
+
+        if 'transform' in data:
+            sphere.set_transform(transform_from_yaml(data))
+
+        if 'material' in data:
+            sphere.material = Material.from_yaml(data)
+
+        return sphere
 
     def local_intersect(self, local_ray):
         sphere_to_ray = subtract(local_ray.origin, point(0, 0, 0))

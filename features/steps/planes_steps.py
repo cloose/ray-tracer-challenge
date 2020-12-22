@@ -9,6 +9,11 @@ def step_create_plane_p(context):
     context.p = Plane()
 
 
+@when(u's <- Plane.from_yaml(data)')
+def step_create_plane_s_from_yaml(context):
+    context.s = Plane.from_yaml(context.data)
+
+
 @when(u'n1 <- local_normal_at(p, point({x:g}, {y:g}, {z:g}))')
 def step_assign_local_normal_at_to_n1(context, x, y, z):
     context.n1 = context.p.local_normal_at(point(x, y, z))

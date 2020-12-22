@@ -3,7 +3,7 @@ from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple
 from tuples import point, vector
 from matrix import multiply, multiply_tuple, inverse
-from transformations import translation, scaling, rotation_x, rotation_y, rotation_z, shearing, view_transform
+from transformations import translation, scaling, rotation_x, rotation_y, rotation_z, shearing, view_transform, transform_from_yaml
 
 
 @given(u'transform <- translation(5, -3, 2)')
@@ -93,6 +93,11 @@ def step_impl(context):
                                  multiply(context.B, context.full_quarter))
 
 
+@when(u'transform <- from_yaml(data)')
+def step_create_transformation_matrix_from_yaml(context):
+    context.transform = transform_from_yaml(context.data)
+
+
 @when(u'A <- view_transform(p, to, up)')
 def step_set_a_to_view_transform_p_to_up(context):
     context.a = view_transform(context.p, context.to, context.up)
@@ -107,7 +112,7 @@ def step_set_b_to_view_transform_p_to_up(context):
 def step_impl(context, x, y, z):
     actual = multiply_tuple(context.transform, context.p)
     expected = point(x, y, z)
-    assert actual == expected, "%r is not %r" % (actual, expected)
+    assert_tuple(actual, expected)
 
 
 @then(u'transform * v = v')

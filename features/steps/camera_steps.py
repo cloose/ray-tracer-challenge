@@ -1,9 +1,9 @@
 from math import pi, sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
-from asserts import assert_float, assert_tuple
+from asserts import assert_float, assert_tuple, assert_matrix
 from tuples import color
 from matrix import identity_matrix, multiply
-from transformations import rotation_y, translation
+from transformations import rotation_y, translation, view_transform
 from camera import Camera
 from ray_tracer import RayTracer
 
@@ -11,6 +11,11 @@ from ray_tracer import RayTracer
 @given(u'c <- camera({hsize:d}, {vsize:d}, pi/2)')
 def step_create_camera_c(context, hsize, vsize):
     context.c = Camera(hsize, vsize, pi / 2)
+
+
+@when(u'c <- Camera.from_yaml(data)')
+def step_create_camera_c_from_yaml(context):
+    context.c = Camera.from_yaml(context.data)
 
 
 @when(u'r2 <- ray_for_pixel(c, {x:d}, {y:d})')
@@ -52,6 +57,12 @@ def step_assert_field_of_view_of_c(context):
 @then(u'c.transform = identity_matrix')
 def step_assert_transform_of_c_equals_identity_matrix(context):
     assert context.c.transform() == identity_matrix()
+
+
+@then(u'c.transform = view_transform(p, to, up)')
+def step_assert_transform_of_c_equals_view_transform(context):
+    assert_matrix(context.c.transform(),
+                  view_transform(context.p, context.to, context.up))
 
 
 @then(u'c.pixel_size = {expected:g}')

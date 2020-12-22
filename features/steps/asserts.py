@@ -9,6 +9,9 @@ def assert_float(actual, expected):
 
 def assert_tuple(actual, expected):
     """Asserts that two tuples are equal."""
+    assert len(actual) == len(expected), \
+            f"not same length: {actual} is not {expected}"
+
     size = len(actual)
     for val in range(size):
         assert equal(actual[val], expected[val]), \

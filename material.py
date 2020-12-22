@@ -13,6 +13,26 @@ class Material:
         self.refractive_index = 1.0
         self.pattern = None
 
+    @classmethod
+    def from_yaml(cls, data):
+        material = cls()
+
+        material_data = data['material']
+        if 'color' in material_data:
+            values = material_data['color']
+            material.color = color(values[0], values[1], values[2])
+
+        if 'ambient' in material_data:
+            material.ambient = material_data['ambient']
+
+        if 'diffuse' in material_data:
+            material.diffuse = material_data['diffuse']
+
+        if 'specular' in material_data:
+            material.specular = material_data['specular']
+
+        return material
+
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.__dict__ == other.__dict__

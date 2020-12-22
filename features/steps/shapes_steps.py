@@ -1,7 +1,7 @@
 from math import pi, sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple, assert_matrix
-from tuples import point, vector, normalize
+from tuples import color, point, vector, normalize
 from matrix import identity_matrix, multiply
 from transformations import translation, scaling, rotation_z
 from material import Material
@@ -90,6 +90,11 @@ def step_assert_material_of_s_equals_default_material(context):
 @then(u's.material = m')
 def step_assert_material_of_s_equals_m(context):
     assert context.s.material == context.m
+
+
+@then(u's.material.color = color({red:g}, {green:g}, {blue:g})')
+def step_assert_material_color_of_s_equals_color(context, red, green, blue):
+    assert_tuple(context.s.material.color, color(red, green, blue))
 
 
 @then(u's.saved_ray.origin = point({x:g}, {y:g}, {z:g})')
