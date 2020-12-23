@@ -2,7 +2,7 @@ from tuples import vector
 from transformations import transform_from_yaml
 from material import Material
 from intersection import Intersection
-from shape import Shape
+from .shape import Shape
 
 
 class Plane(Shape):

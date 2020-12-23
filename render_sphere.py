@@ -2,7 +2,7 @@
 
 from tuples import point, color, normalize, subtract
 from canvas import Canvas
-from sphere import Sphere
+from shapes import Sphere
 from rays import Ray
 from intersection import hit
 from transformations import scaling

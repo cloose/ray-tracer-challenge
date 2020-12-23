@@ -5,7 +5,7 @@ from tuples import color, point, vector, normalize
 from matrix import identity_matrix, multiply
 from transformations import translation, scaling, rotation_z
 from material import Material
-from shape import Shape
+from shapes import Shape
 
 
 class TestShape(Shape):

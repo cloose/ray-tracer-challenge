@@ -1,7 +1,6 @@
 from math import pi
 from tuples import point, vector, color
-from sphere import Sphere
-from plane import Plane
+from shapes import Sphere, Plane
 from transformations import scaling, translation, rotation_x, rotation_y, view_transform
 from matrix import multiply
 from material import Material

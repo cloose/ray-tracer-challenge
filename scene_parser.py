@@ -1,9 +1,7 @@
 from world import World
 from camera import Camera
 from lights import PointLight
-from shape import Cube
-from plane import Plane
-from sphere import Sphere
+from shapes import Cube, Plane, Sphere
 
 _TYPE_MAP = {
     'camera': Camera.from_yaml,

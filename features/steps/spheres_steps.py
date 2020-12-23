@@ -2,8 +2,7 @@ from math import sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float, assert_tuple
 from tuples import point, vector
-from shape import Shape
-from sphere import Sphere
+from shapes import Sphere, Shape
 from matrix import identity_matrix, multiply
 from transformations import translation, scaling, rotation_z
 from material import Material

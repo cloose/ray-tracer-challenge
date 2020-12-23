@@ -1,7 +1,7 @@
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple
 from tuples import vector
-from shape import Cube
+from shapes import Cube
 
 
 @given(u'c <- cube()')

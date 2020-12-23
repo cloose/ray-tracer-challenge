@@ -2,8 +2,7 @@ from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple, assert_float
 from tuples import color
 from transformations import scaling, translation
-from sphere import Sphere
-from plane import Plane
+from shapes import Plane, Sphere
 from world import World
 
 TRANSFORMATIONS = {

@@ -1,6 +1,6 @@
 from tuples import point, color, normalize, subtract, negate
 from canvas import Canvas
-from sphere import Sphere, normal_at
+from shapes import Sphere
 from rays import Ray
 from intersection import hit
 from transformations import scaling
@@ -45,10 +45,11 @@ def main():
             shape_hit = hit(xs)
             if shape_hit is not None:
                 hit_point = r.position_at(shape_hit.t)
-                normal = normal_at(shape_hit.object, hit_point)
+                normal = shape_hit.object.normal_at(hit_point)
                 eye = negate(r.direction)
-                px_color = lighting(shape_hit.object.material, light,
-                                    hit_point, eye, normal)
+                px_color = lighting(shape_hit.object.material,
+                                    shape_hit.object, light, hit_point, eye,
+                                    normal)
                 canvas.set_pixel(x, y, px_color)
 
     ppm = canvas.to_ppm()

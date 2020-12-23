@@ -3,7 +3,7 @@ from tuples import point, subtract, dot
 from transformations import transform_from_yaml
 from material import Material
 from intersection import Intersection
-from shape import Shape
+from .shape import Shape
 
 
 class Sphere(Shape):
