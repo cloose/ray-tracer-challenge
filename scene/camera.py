@@ -1,7 +1,5 @@
 from math import tan
-from tuples import point, vector, normalize, subtract
-from matrix import identity_matrix, inverse, multiply_tuple
-from transformations import view_transform
+from core import point, vector, normalize, subtract, identity_matrix, inverse, multiply_tuple, view_transform
 from rays import Ray
 
 

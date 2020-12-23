@@ -1,5 +1,4 @@
-from tuples import normalize
-from matrix import identity_matrix, inverse, multiply_tuple, transpose
+from core import normalize, identity_matrix, inverse, multiply_tuple, transpose
 from material import Material
 
 

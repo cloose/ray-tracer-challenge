@@ -1,6 +1,5 @@
 from math import sqrt
-from tuples import point, subtract, dot
-from transformations import transform_from_yaml
+from core import point, subtract, dot, transform_from_yaml
 from material import Material
 from intersection import Intersection
 from .shape import Shape

@@ -1,8 +1,8 @@
 from behave import when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float, assert_tuple, assert_matrix
-from tuples import color
-from matrix import multiply
-from transformations import translation, scaling
+from core import color
+from core import multiply_matrix
+from core import translation, scaling
 from scene import scene_from_yaml
 
 
@@ -42,5 +42,6 @@ def step_impl(context, index, expected):
 )
 def step_assert_transformation_matrix_of_object_at_index(
     context, index, tx, ty, tz, sx, sy, sz):
-    assert_matrix(context.w.objects[index].transform(),
-                  multiply(scaling(sx, sy, sz), translation(tx, ty, tz)))
+    assert_matrix(
+        context.w.objects[index].transform(),
+        multiply_matrix(scaling(sx, sy, sz), translation(tx, ty, tz)))

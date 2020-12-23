@@ -1,7 +1,5 @@
-from math import isclose
-from behave import given, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple
-from tuples import color, add, subtract, multiply, hadamard
+from core import color, add, subtract, multiply, hadamard
 
 
 @given(u'c <- color({r:g}, {g:g}, {b:g})')
@@ -52,7 +50,7 @@ def step_impl(context):
 @then(u'c1 - c2 = color(0.2, 0.5, 0.5)')
 def step_impl(context):
     actual = subtract(context.c1, context.c2)
-    assert_color(actual, color(0.2, 0.5, 0.5))
+    assert_tuple(actual, color(0.2, 0.5, 0.5))
 
 
 @then(u'c * 2 = color(0.4, 0.6, 0.8)')
@@ -62,10 +60,4 @@ def step_impl(context):
 
 @then(u'c1 * c2 = color(0.9, 0.2, 0.04)')
 def step_impl(context):
-    assert_color(hadamard(context.c1, context.c2), color(0.9, 0.2, 0.04))
-
-
-def assert_color(actual, expected):
-    assert isclose(actual[0], expected[0])
-    assert isclose(actual[1], expected[1])
-    assert isclose(actual[2], expected[2])
+    assert_tuple(hadamard(context.c1, context.c2), color(0.9, 0.2, 0.04))

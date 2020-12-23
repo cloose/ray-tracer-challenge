@@ -1,9 +1,7 @@
 from math import pi, sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float, assert_tuple, assert_matrix
-from tuples import color
-from matrix import identity_matrix, multiply
-from transformations import rotation_y, translation, view_transform
+from core import color, identity_matrix, multiply_matrix, rotation_y, translation, view_transform
 from scene import Camera
 from ray_tracer import RayTracer
 
@@ -25,8 +23,8 @@ def step_set_r_to_ray_for_pixel(context, x, y):
 
 @when(u'c.transform <- rotation_y(pi/4) * translation(0, -2, 5)')
 def step_set_transform_of_c_to_transformation_matrix(context):
-    context.c.set_transform(multiply(rotation_y(pi / 4), translation(0, -2,
-                                                                     5)))
+    context.c.set_transform(
+        multiply_matrix(rotation_y(pi / 4), translation(0, -2, 5)))
 
 
 @when(u'c.transform <- A')

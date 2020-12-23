@@ -1,4 +1,4 @@
-from tuples import point, vector, add, normalize
+from core import point, vector, add, normalize
 
 
 def tick(env, proj):

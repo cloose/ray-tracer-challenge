@@ -1,5 +1,4 @@
-from tuples import add, multiply
-from matrix import multiply_tuple
+from core import add, multiply, multiply_tuple
 
 
 class Ray:

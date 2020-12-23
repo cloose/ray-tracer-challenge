@@ -1,7 +1,6 @@
 from math import sqrt
 from shapes import Sphere
-from tuples import point, color, add, subtract, magnitude, normalize, multiply, dot
-from transformations import scaling
+from core import point, color, add, subtract, magnitude, normalize, multiply, dot, scaling
 from lights import PointLight
 from material import Material, lighting
 from rays import Ray

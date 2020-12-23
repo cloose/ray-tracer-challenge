@@ -1,5 +1,5 @@
 from math import floor
-from tuples import add, subtract, multiply
+from core import add, subtract, multiply
 from .pattern import Pattern
 
 

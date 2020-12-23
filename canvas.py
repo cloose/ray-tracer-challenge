@@ -1,4 +1,4 @@
-from tuples import color
+from core import color
 
 
 class Canvas:

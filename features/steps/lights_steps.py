@@ -1,7 +1,7 @@
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple
 from lights import PointLight
-from tuples import point, color
+from core import point, color
 
 
 @given(

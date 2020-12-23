@@ -1,6 +1,6 @@
-from tuples import tuple
-from math import isclose
-from matrix import matrix, multiply, multiply_tuple, identity_matrix, transpose, determinant, submatrix, minor, cofactor, isinvertible, inverse
+from behave import given, when, then  # pylint: disable=no-name-in-module
+from asserts import assert_matrix
+from core import tuple_4d, matrix, multiply_matrix, multiply_tuple, identity_matrix, transpose, determinant, submatrix, minor, cofactor, isinvertible, inverse
 
 
 @given(u'the following {m:d}x{n:d} matrix M')
@@ -29,7 +29,7 @@ def step_impl(context):
 
 @given(u'b <- tuple({x:d}, {y:d}, {z:d}, {w:d})')
 def step_impl(context, x, y, z, w):
-    context.b = tuple(x, y, z, w)
+    context.b = tuple_4d(x, y, z, w)
 
 
 @given(u'A <- transpose(identity_matrix)')
@@ -44,7 +44,7 @@ def step_impl(context):
 
 @when(u'C <- M * B')
 def step_impl(context):
-    context.c = multiply(context.m, context.b)
+    context.c = multiply_matrix(context.m, context.b)
 
 
 @then(u'M[{r:d},{c:d}] = {v:g}')
@@ -73,7 +73,7 @@ def step_impl(context):
     for r in range(4):
         for c in range(4):
             expected[r][c] = float(context.table[r][c])
-    assert multiply(context.a, context.b) == expected
+    assert multiply_matrix(context.a, context.b) == expected
 
 
 @then(u'transpose(A) is the following matrix')
@@ -87,12 +87,12 @@ def step_impl(context):
 
 @then(u'A * b = tuple(18, 24, 33, 1)')
 def step_impl(context):
-    assert multiply_tuple(context.a, context.b) == tuple(18, 24, 33, 1)
+    assert multiply_tuple(context.a, context.b) == tuple_4d(18, 24, 33, 1)
 
 
 @then(u'A * identity_matrix = A')
 def step_impl(context):
-    assert multiply(context.a, identity_matrix()) == context.a
+    assert multiply_matrix(context.a, identity_matrix()) == context.a
 
 
 @then(u'identity_matrix * a = a')
@@ -156,7 +156,7 @@ def step_impl(context, row, col, d1, d2):
 
 @then(u'C * inverse(B) = M')
 def step_impl(context):
-    actual = multiply(context.c, inverse(context.b))
+    actual = multiply_matrix(context.c, inverse(context.b))
     expected = context.m
     assert_matrix(actual, expected)
 
@@ -169,20 +169,3 @@ def step_impl(context):
             expected[row][col] = float(context.table[row][col])
     actual = context.b
     assert_matrix(actual, expected)
-
-
-def assert_matrix(actual, expected):
-    rows = len(actual)
-    columns = len(actual[0])
-
-    for row in range(rows):
-        for col in range(columns):
-            assert equal(actual[row][col], expected[row][col]), \
-                    "error [%r][%r]: %r is not %r" % (row, col, actual, expected)
-
-
-EPSILON = 0.00001
-
-
-def equal(a: float, b: float) -> bool:
-    return abs(a - b) < EPSILON

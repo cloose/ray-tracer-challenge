@@ -1,4 +1,4 @@
-from tuples import color, point
+from core import color, point
 
 
 class PointLight:

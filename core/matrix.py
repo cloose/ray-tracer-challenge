@@ -1,5 +1,5 @@
 from copy import deepcopy
-from tuples import tuple
+from .tuples import tuple_4d
 
 
 def matrix(rows, columns):
@@ -21,7 +21,7 @@ def submatrix(m, row, column):
     return result
 
 
-def multiply(m1, m2):
+def multiply_matrix(m1, m2):
     rows = len(m1)
     columns = len(m1[0])
     result = matrix(rows, columns)
@@ -37,7 +37,7 @@ def multiply(m1, m2):
 
 
 def multiply_tuple(m, t):
-    result = tuple(0, 0, 0, 0)
+    result = tuple_4d(0, 0, 0, 0)
 
     for row in range(4):
         result[row] = m[row][0] * t[0] + \

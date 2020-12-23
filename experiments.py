@@ -1,5 +1,4 @@
-from tuples import tuple
-from matrix import *
+from core import *
 
 a = identity_matrix()
 print(inverse(a))
@@ -8,7 +7,7 @@ a = identity_matrix()
 a[1][0] = 2
 a[0][3] = -5
 
-b = multiply(a, inverse(a))
+b = multiply_matrix(a, inverse(a))
 print(b)
 
 c = inverse(transpose(a))

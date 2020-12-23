@@ -1,10 +1,9 @@
 from math import sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float, assert_tuple
-from tuples import point
+from core import point, color, vector
 from material import Material, lighting
 from patterns import StripePattern
-from tuples import color, vector
 
 
 @given(u'm <- material()')

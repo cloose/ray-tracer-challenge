@@ -1,9 +1,9 @@
 from math import pi, sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple
-from tuples import point, vector
-from matrix import multiply, multiply_tuple, inverse
-from transformations import translation, scaling, rotation_x, rotation_y, rotation_z, shearing, view_transform, transform_from_yaml
+from core import point, vector
+from core import multiply_matrix, multiply_tuple, inverse
+from core import translation, scaling, rotation_x, rotation_y, rotation_z, shearing, view_transform, transform_from_yaml
 
 
 @given(u'transform <- translation(5, -3, 2)')
@@ -89,8 +89,8 @@ def step_impl(context):
 
 @when(u'transform <- C * B * full_quarter')
 def step_impl(context):
-    context.transform = multiply(context.C,
-                                 multiply(context.B, context.full_quarter))
+    context.transform = multiply_matrix(
+        context.C, multiply_matrix(context.B, context.full_quarter))
 
 
 @when(u'transform <- from_yaml(data)')

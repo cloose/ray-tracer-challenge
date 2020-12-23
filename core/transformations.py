@@ -1,6 +1,6 @@
 from math import cos, sin
-from tuples import normalize, subtract, cross
-from matrix import identity_matrix, multiply
+from .tuples import normalize, subtract, cross
+from .matrix import identity_matrix, multiply_matrix
 
 _TRANSFORMATIONS_BY_NAME = {
     'rotate-x': lambda x: rotation_x(x[1]),
@@ -81,7 +81,7 @@ def view_transform(from_point, to, up):
     orientation[2][1] = -forward_vector[1]
     orientation[2][2] = -forward_vector[2]
 
-    return multiply(
+    return multiply_matrix(
         orientation, translation(-from_point[0], -from_point[1],
                                  -from_point[2]))
 
@@ -94,6 +94,6 @@ def transform_from_yaml(data):
         if transform_method is None:
             raise ValueError(
                 f"Unknown transformation type '{transformation[0]}'")
-        result = multiply(transform_method(transformation), result)
+        result = multiply_matrix(transform_method(transformation), result)
 
     return result

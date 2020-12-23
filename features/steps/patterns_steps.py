@@ -1,9 +1,9 @@
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple
-from tuples import color, point
+from core import color, point
 from patterns import Pattern, StripePattern, GradientPattern, RingPattern, CheckersPattern
-from matrix import identity_matrix
-from transformations import scaling, translation
+from core import identity_matrix
+from core import scaling, translation
 
 COLORS = {'black': color(0, 0, 0), 'white': color(1, 1, 1)}
 

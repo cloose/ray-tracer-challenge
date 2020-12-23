@@ -1,5 +1,7 @@
+from behave import given, when, then  # pylint: disable=no-name-in-module
 from canvas import Canvas
-from tuples import color
+from core import color
+
 
 @given(u'c <- canvas({w:d}, {h:d})')
 def step_impl(context, w, h):
@@ -67,7 +69,7 @@ def step_impl(context):
 @then(u'lines {s:d}-{e:d} of ppm are')
 def step_impl(context, s, e):
     text = context.text.splitlines()
-    ppm = context.ppm.splitlines()[s-1:e]
+    ppm = context.ppm.splitlines()[s - 1:e]
     assert ppm == text, "%r is not %r" % (ppm, text)
 
 

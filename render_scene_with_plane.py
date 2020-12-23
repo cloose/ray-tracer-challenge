@@ -1,8 +1,7 @@
 from math import pi
-from tuples import point, vector, color
+from core import point, vector, color, multiply_matrix
+from core import scaling, translation, rotation_y, view_transform
 from shapes import Sphere, Plane
-from transformations import scaling, translation, rotation_x, rotation_y, view_transform
-from matrix import multiply
 from material import Material
 from lights import PointLight
 from scene import Camera, World
@@ -14,25 +13,25 @@ def render_scene_with_plane():
     floor = Plane()
     floor.set_transform(scaling(10, 0.01, 10))
     # floor.set_transform(
-    # multiply(translation(0, 0.33, 0), scaling(10, 0.01, 10)))
+    # multiply_matrix(translation(0, 0.33, 0), scaling(10, 0.01, 10)))
     floor.material = Material()
     floor.material.color = color(1, 0.9, 0.9)
     floor.material.specular = 0
 
     # left_wall = Plane()
     # left_wall.set_transform(
-    #     multiply(
+    #     multiply_matrix(
     #         translation(0, 0, 5),
-    #         multiply(rotation_y(-pi / 4),
-    #                  multiply(rotation_x(pi / 2), scaling(10, 0.01, 10)))))
+    #         multiply_matrix(rotation_y(-pi / 4),
+    #                  multiply_matrix(rotation_x(pi / 2), scaling(10, 0.01, 10)))))
     # left_wall.material = floor.material
 
     # right_wall = Plane()
     # right_wall.set_transform(
-    #     multiply(
+    #     multiply_matrix(
     #         translation(0, 0, 5),
-    #         multiply(rotation_y(pi / 4),
-    #                  multiply(rotation_x(pi / 2), scaling(10, 0.01, 10)))))
+    #         multiply_matrix(rotation_y(pi / 4),
+    #                  multiply_matrix(rotation_x(pi / 2), scaling(10, 0.01, 10)))))
 
     middle = Sphere()
     middle.set_transform(translation(-0.5, 1, 0.5))
@@ -44,11 +43,11 @@ def render_scene_with_plane():
     middle.material.specular = 0.3
 
     middle.material.pattern.set_transform(
-        multiply(scaling(0.2, 0.2, 0.2), rotation_y(pi / 4)))
+        multiply_matrix(scaling(0.2, 0.2, 0.2), rotation_y(pi / 4)))
 
     right = Sphere()
     right.set_transform(
-        multiply(translation(1.5, 0.5, -0.5), scaling(0.5, 0.5, 0.5)))
+        multiply_matrix(translation(1.5, 0.5, -0.5), scaling(0.5, 0.5, 0.5)))
     right.material = Material()
     right.material.color = color(0.5, 1, 0.1)
     # right.material.diffuse = 0.7
@@ -58,7 +57,8 @@ def render_scene_with_plane():
 
     left = Sphere()
     left.set_transform(
-        multiply(translation(-1.5, 0.33, -0.75), scaling(0.33, 0.33, 0.33)))
+        multiply_matrix(translation(-1.5, 0.33, -0.75),
+                        scaling(0.33, 0.33, 0.33)))
     left.material = Material()
     left.material.color = color(1, 0.8, 0.1)
     left.material.diffuse = 0.7

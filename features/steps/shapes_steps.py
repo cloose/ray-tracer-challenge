@@ -1,9 +1,9 @@
 from math import pi, sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple, assert_matrix
-from tuples import color, point, vector, normalize
-from matrix import identity_matrix, multiply
-from transformations import translation, scaling, rotation_z
+from core import color, point, vector, normalize
+from core import identity_matrix, multiply_matrix
+from core import translation, scaling, rotation_z
 from material import Material
 from shapes import Shape
 
@@ -27,7 +27,7 @@ def step_create_test_shape_s(context):
 
 @given(u'm <- scaling(1, 0.5, 1) * rotation_z(pi/5)')
 def step_create_scaling_rotation_z_matrix_m(context):
-    context.m = multiply(scaling(1, 0.5, 1), rotation_z(pi / 5))
+    context.m = multiply_matrix(scaling(1, 0.5, 1), rotation_z(pi / 5))
 
 
 @when(u'set_transform(s, m)')

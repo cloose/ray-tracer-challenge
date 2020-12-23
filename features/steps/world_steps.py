@@ -1,7 +1,7 @@
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple, assert_float
-from tuples import color
-from transformations import scaling, translation
+from core import color
+from core import scaling, translation
 from shapes import Plane, Sphere
 from scene import World
 

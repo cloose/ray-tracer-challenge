@@ -1,4 +1,4 @@
-from tuples import color, hadamard, normalize, add, subtract, multiply, dot, negate, reflect
+from core import color, hadamard, normalize, add, subtract, multiply, dot, negate, reflect
 
 
 class Material:

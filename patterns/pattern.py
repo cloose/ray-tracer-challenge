@@ -1,4 +1,4 @@
-from matrix import identity_matrix, multiply_tuple, inverse
+from core import identity_matrix, multiply_tuple, inverse
 
 
 class Pattern:
