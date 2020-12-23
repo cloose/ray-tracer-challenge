@@ -3,7 +3,7 @@ from asserts import assert_tuple, assert_float
 from tuples import color
 from transformations import scaling, translation
 from shapes import Plane, Sphere
-from world import World
+from scene import World
 
 TRANSFORMATIONS = {
     'scaling(0.5, 0.5, 0.5)': scaling(0.5, 0.5, 0.5),

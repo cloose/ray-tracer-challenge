@@ -3,7 +3,7 @@ from asserts import assert_float, assert_tuple, assert_matrix
 from tuples import color
 from matrix import multiply
 from transformations import translation, scaling
-from scene_parser import scene_from_yaml
+from scene import scene_from_yaml
 
 
 @when(u'w <- scene_from_yaml(data)')

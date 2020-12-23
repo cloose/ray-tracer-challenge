@@ -1,8 +1,8 @@
 from math import sqrt
+from shapes import Sphere
 from tuples import point, color, add, subtract, magnitude, normalize, multiply, dot
 from transformations import scaling
 from lights import PointLight
-from shapes import Sphere
 from material import Material, lighting
 from rays import Ray
 from intersection import hit as hit_at

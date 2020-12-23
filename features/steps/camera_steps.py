@@ -4,7 +4,7 @@ from asserts import assert_float, assert_tuple, assert_matrix
 from tuples import color
 from matrix import identity_matrix, multiply
 from transformations import rotation_y, translation, view_transform
-from camera import Camera
+from scene import Camera
 from ray_tracer import RayTracer
 
 

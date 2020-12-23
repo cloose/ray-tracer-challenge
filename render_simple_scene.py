@@ -5,8 +5,7 @@ from transformations import scaling, translation, rotation_x, rotation_y, view_t
 from matrix import multiply
 from material import Material
 from lights import PointLight
-from world import World
-from camera import Camera
+from scene import Camera, World
 from ray_tracer import RayTracer
 
 
