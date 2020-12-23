@@ -2,7 +2,8 @@ from math import sqrt
 from shapes import Sphere
 from core import point, color, add, subtract, magnitude, normalize, multiply, dot, scaling
 from lights import PointLight
-from material import Material, lighting
+from material import Material
+from shader import lighting
 from rays import Ray
 from intersection import hit as hit_at
 from hit import Hit

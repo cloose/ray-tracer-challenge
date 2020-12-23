@@ -3,7 +3,8 @@ from canvas import Canvas
 from shapes import Sphere
 from rays import Ray
 from intersection import hit
-from material import Material, lighting
+from material import Material
+from shader import lighting
 from lights import PointLight
 
 
