@@ -31,6 +31,12 @@ class Material:
         if 'specular' in material_data:
             material.specular = material_data['specular']
 
+        if 'shininess' in material_data:
+            material.shininess = material_data['shininess']
+
+        if 'reflective' in material_data:
+            material.reflective = material_data['reflective']
+
         return material
 
     def __eq__(self, other):

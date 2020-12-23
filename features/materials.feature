@@ -21,12 +21,17 @@ Scenario: Creating a material from yaml
     ambient: 0.2
     diffuse: 0.1
     specular: 0.3
+    shininess: 300
+    reflective: 0.1
   """"
   When m <- Material.from_yaml(data)
   Then m.color = color(0.9, 0.4, 0.6)
   And m.ambient = 0.2
   And m.diffuse = 0.1
   And m.specular = 0.3
+  And m.shininess = 300.0
+  And m.reflective = 0.1
+
 
 Scenario: Lighting with the eye between the light and the surface
   Given v1 <- vector(0, 0, -1)
