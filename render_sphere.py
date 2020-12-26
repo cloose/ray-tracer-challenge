@@ -1,10 +1,8 @@
 # pylint: disable=invalid-name
 
-from core import point, color, normalize, subtract, scaling
+from core import Ray, point, color, normalize, subtract, scaling, hit
 from canvas import Canvas
 from shapes import Sphere
-from rays import Ray
-from intersection import hit
 
 
 def main():

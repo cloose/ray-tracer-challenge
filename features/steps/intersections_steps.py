@@ -1,6 +1,6 @@
 from math import sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
-from intersection import Intersection, hit
+from core import Intersection, hit
 
 INTERSECTION_BY_NAME = {
     'i1': lambda context: context.i1,

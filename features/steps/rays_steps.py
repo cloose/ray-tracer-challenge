@@ -1,8 +1,7 @@
 from math import sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple
-from core import point, vector
-from rays import Ray
+from core import Ray, point, vector
 
 
 @given(u'origin <- point({x:g}, {y:g}, {z:g})')

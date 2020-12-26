@@ -1,8 +1,7 @@
 from math import sqrt
 from behave import when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float, assert_tuple
-from core import point, vector
-from hit import Hit
+from core import Hit, point, vector
 
 _EPSILON = 0.00001
 

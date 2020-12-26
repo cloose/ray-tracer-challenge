@@ -1,5 +1,5 @@
 from math import sqrt
-from core import negate, dot, add, subtract, multiply, reflect
+from .tuples import negate, dot, add, subtract, multiply, reflect
 
 
 class Hit:

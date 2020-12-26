@@ -1,8 +1,7 @@
 from math import pi
 from core import point, vector, color, multiply_matrix
 from core import scaling, translation, rotation_x, rotation_y, view_transform
-from shapes import Sphere
-from material import Material
+from shapes import Material, Sphere
 from lights import PointLight
 from scene import Camera, World
 from ray_tracer import RayTracer

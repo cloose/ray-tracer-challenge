@@ -4,8 +4,7 @@ from asserts import assert_tuple, assert_matrix
 from core import color, point, vector, normalize
 from core import identity_matrix, multiply_matrix
 from core import translation, scaling, rotation_z
-from material import Material
-from shapes import Shape
+from shapes import Material, Shape
 
 
 class TestShape(Shape):

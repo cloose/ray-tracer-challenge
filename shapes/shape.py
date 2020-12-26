@@ -1,5 +1,5 @@
 from core import normalize, identity_matrix, inverse, multiply_tuple, transpose
-from material import Material
+from .material import Material
 
 
 class Shape:

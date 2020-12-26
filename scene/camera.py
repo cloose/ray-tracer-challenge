@@ -1,6 +1,5 @@
 from math import tan
-from core import point, vector, normalize, subtract, identity_matrix, inverse, multiply_tuple, view_transform
-from rays import Ray
+from core import Ray, point, vector, normalize, subtract, identity_matrix, inverse, multiply_tuple, view_transform
 
 
 class Camera:

@@ -2,10 +2,9 @@ from math import sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float, assert_tuple
 from core import point, vector
-from shapes import Sphere, Shape
+from shapes import Material, Sphere, Shape
 from core import identity_matrix, multiply
 from core import translation, scaling, rotation_z
-from material import Material
 from patterns_steps import TestPattern
 
 TRANSFORMATIONS = {

@@ -1,7 +1,6 @@
 from math import sqrt
-from core import point, subtract, dot, transform_from_yaml
-from material import Material
-from intersection import Intersection
+from core import Intersection, point, subtract, dot, transform_from_yaml
+from .material import Material
 from .shape import Shape
 
 

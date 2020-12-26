@@ -1,7 +1,6 @@
 from math import inf
-from core import vector, transform_from_yaml
-from material import Material
-from intersection import Intersection
+from core import Intersection, vector, transform_from_yaml
+from .material import Material
 from .shape import Shape
 
 
