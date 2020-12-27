@@ -1,9 +1,8 @@
 from math import sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float, assert_tuple
-from core import point, color, vector
+from core import point, color, vector, lighting
 from shapes import Material
-from shader import lighting
 from patterns import StripePattern
 
 

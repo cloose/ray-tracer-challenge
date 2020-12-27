@@ -1,9 +1,8 @@
 from math import sqrt
 from shapes import Sphere, Material
 from core import Ray, Hit, point, color, add, subtract, magnitude, normalize, multiply, dot, \
-        scaling, hit as hit_at
+        scaling, hit as hit_at, lighting
 from lights import PointLight
-from shader import lighting
 
 
 class World:

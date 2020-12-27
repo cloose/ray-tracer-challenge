@@ -1,6 +1,5 @@
 from behave import given, when, then  # pylint: disable=no-name-in-module
-from canvas import Canvas
-from core import color
+from core import color, Canvas
 
 
 @given(u'c <- canvas({w:d}, {h:d})')

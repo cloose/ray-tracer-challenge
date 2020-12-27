@@ -1,5 +1,4 @@
-from core import point, vector, color, add, normalize, multiply
-from canvas import Canvas
+from core import Canvas, point, vector, color, add, normalize, multiply
 
 
 def tick(env, proj):

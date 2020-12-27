@@ -1,6 +1,6 @@
 from math import pi
-from core import point, color, multiply_matrix, multiply_tuple, translation, scaling, rotation_y
-from canvas import Canvas
+from core import Canvas, point, color, multiply_matrix, multiply_tuple, \
+        translation, scaling, rotation_y
 
 
 def main():

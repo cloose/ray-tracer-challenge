@@ -1,4 +1,4 @@
-from core import color, hadamard, normalize, add, subtract, multiply, dot, negate, reflect
+from .tuples import color, hadamard, normalize, add, subtract, multiply, dot, negate, reflect
 
 
 def lighting(material, shape, light, point, eyev, normalv, in_shadow=False):

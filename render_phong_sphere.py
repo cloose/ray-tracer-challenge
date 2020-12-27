@@ -1,7 +1,5 @@
-from core import Ray, point, color, normalize, subtract, negate, scaling, hit
-from canvas import Canvas
+from core import Canvas, Ray, point, color, normalize, subtract, negate, scaling, hit, lighting
 from shapes import Material, Sphere
-from shader import lighting
 from lights import PointLight
 
 

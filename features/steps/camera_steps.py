@@ -2,8 +2,7 @@ from math import pi, sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float, assert_tuple, assert_matrix
 from core import color, identity_matrix, multiply_matrix, rotation_y, translation, view_transform
-from scene import Camera
-from ray_tracer import RayTracer
+from scene import Camera, RayTracer
 
 
 @given(u'c <- camera({hsize:d}, {vsize:d}, pi/2)')

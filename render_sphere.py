@@ -1,7 +1,6 @@
 # pylint: disable=invalid-name
 
-from core import Ray, point, color, normalize, subtract, scaling, hit
-from canvas import Canvas
+from core import Canvas, Ray, point, color, normalize, subtract, scaling, hit
 from shapes import Sphere
 
 
