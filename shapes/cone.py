@@ -1,10 +1,9 @@
 from math import inf, sqrt
-from core import Intersection, vector, transform_from_yaml
-from .material import Material
+from core import Intersection, vector
 from .shape import Shape
 
 
-class Cylinder(Shape):
+class Cone(Shape):
     def __init__(self):
         super().__init__()
 
@@ -12,34 +11,30 @@ class Cylinder(Shape):
         self.maximum = inf
         self.closed = False
 
-    @classmethod
-    def from_yaml(cls, data):
-        cylinder = cls()
-
-        if 'transform' in data:
-            cylinder.set_transform(transform_from_yaml(data))
-
-        if 'material' in data:
-            cylinder.material = Material.from_yaml(data)
-
-        return cylinder
-
     def local_intersect(self, local_ray):
-        a = local_ray.direction[0]**2 + local_ray.direction[2]**2
+        a = local_ray.direction[0]**2 - \
+            local_ray.direction[1]**2 + \
+            local_ray.direction[2]**2
+        b = 2 * local_ray.origin[0] * local_ray.direction[0] - \
+            2 * local_ray.origin[1] * local_ray.direction[1] + \
+            2 * local_ray.origin[2] * local_ray.direction[2]
 
-        # ray is parallel to the y axis?
+        if abs(a) < self.EPSILON and abs(b) < self.EPSILON:
+            return []
+
+        c = local_ray.origin[0]**2 - \
+            local_ray.origin[1]**2 + \
+            local_ray.origin[2]**2
+
         if abs(a) < self.EPSILON:
-            xs = []
+            t = -c / (2 * b)
+            xs = [Intersection(t, self)]
             self.intersect_caps(local_ray, xs)
             return xs
 
-        b = 2 * local_ray.origin[0] * local_ray.direction[0] + \
-            2 * local_ray.origin[2] * local_ray.direction[2]
-        c = local_ray.origin[0]**2 + local_ray.origin[2]**2 - 1
-
         discriminant = b**2 - 4 * a * c
 
-        # ray does not intersect the cylinder
+        # ray does not intersect the cone
         if discriminant < 0:
             return []
 
@@ -72,21 +67,21 @@ class Cylinder(Shape):
         # check for an intersection with the lower end cap by intersecting
         # the ray with the plane at y=cyl.minimum
         t = (self.minimum - ray.origin[1]) / ray.direction[1]
-        if self.check_cap(ray, t):
+        if self.check_cap(ray, t, self.minimum):
             xs.append(Intersection(t, self))
 
         # check for an intersection with the upper end cap by intersecting
         # the ray with the plane at y=cyl.maximum
         t = (self.maximum - ray.origin[1]) / ray.direction[1]
-        if self.check_cap(ray, t):
+        if self.check_cap(ray, t, self.maximum):
             xs.append(Intersection(t, self))
 
     # checks to see if the intersection at `t` is within a radius
     # of 1 (the radius of your cylinders) from the y axis.
-    def check_cap(self, ray, t):
+    def check_cap(self, ray, t, radius):
         x = ray.origin[0] + t * ray.direction[0]
         z = ray.origin[2] + t * ray.direction[2]
-        return (x**2 + z**2) <= 1
+        return (x**2 + z**2) <= radius**2
 
     def local_normal_at(self, local_point):
         # compute the square of the distance from the y axis
@@ -98,4 +93,8 @@ class Cylinder(Shape):
         if dist < 1 and local_point[1] <= self.minimum + self.EPSILON:
             return vector(0, -1, 0)
 
-        return vector(local_point[0], 0, local_point[2])
+        y = sqrt(local_point[0]**2 + local_point[2]**2)
+        if local_point[1] > 0:
+            y = -y
+
+        return vector(local_point[0], y, local_point[2])
