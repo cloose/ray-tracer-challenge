@@ -144,7 +144,7 @@ def step_assert_object_of_xs_at_index_equals_s(context, index):
 @then(u'xs[{index:d}].t = {expected:g}')
 def step_assert_t_of_xs_at_index(context, index, expected):
     actual = context.xs[index].t
-    assert actual == expected, f"{actual} is not {expected}"
+    assert_float(actual, expected)
 
 
 @then(u's.transform = C')

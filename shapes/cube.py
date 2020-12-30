@@ -5,8 +5,6 @@ from .shape import Shape
 
 
 class Cube(Shape):
-    EPSILON = 0.00001
-
     def __init__(self):
         super().__init__()
 

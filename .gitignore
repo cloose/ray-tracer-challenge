@@ -7,3 +7,6 @@ tags
 
 # render output images
 *.ppm
+
+# vim swap files
+*.swp

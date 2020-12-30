@@ -3,6 +3,8 @@ from .material import Material
 
 
 class Shape:
+    EPSILON = 1e-9
+
     def __init__(self):
         self.__transform = identity_matrix()
         self.__inverse_transform = identity_matrix()
