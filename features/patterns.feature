@@ -46,6 +46,16 @@ Scenario: A pattern with an object transformation
   And c <- pattern_at_shape(pattern, s, point(2, 3, 4))
   Then c = color(1, 1.5, 2)
 
+Scenario: A pattern with an group transformation
+  Given s <- sphere()
+  And g <- group()
+  And pattern <- test_pattern()
+  When add_child(g, s)
+  And set_transform(s, scaling(2, 2, 2))
+  And set_transform(g, translation(-2, 0, -1))
+  And c <- pattern_at_shape(pattern, s, point(2, 3, 4))
+  Then c = color(2, 1.5, 2.5)
+
 Scenario: A pattern with a pattern transformation
   Given s <- sphere()
   And pattern <- test_pattern()

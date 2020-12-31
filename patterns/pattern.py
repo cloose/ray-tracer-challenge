@@ -20,7 +20,7 @@ class Pattern:
 
     def pattern_at_shape(self, shape, point):
         """"""
-        shape_point = multiply_tuple(shape.inverse_transform(), point)
+        shape_point = shape.world_to_object(point)
         pattern_point = multiply_tuple(self.__inverse_transform, shape_point)
         return self.pattern_at(pattern_point)
 

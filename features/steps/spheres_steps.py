@@ -135,10 +135,11 @@ def step_assert_count_of_xs(context, expected):
     assert_float(actual, expected)
 
 
-@then(u'xs[{index:d}].object = s')
-def step_assert_object_of_xs_at_index_equals_s(context, index):
+@then(u'xs[{index:d}].object = {shape}')
+def step_assert_object_of_xs_at_index_equals_s(context, index, shape):
     actual = context.xs[index].object
-    assert actual == context.s, f"{actual} is not {context.s}"
+    expected = getattr(context, shape, None)
+    assert actual == expected, f"{actual} is not {expected} ({shape})"
 
 
 @then(u'xs[{index:d}].t = {expected:g}')

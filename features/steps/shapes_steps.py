@@ -3,7 +3,7 @@ from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple, assert_matrix
 from core import color, point, vector, normalize
 from core import identity_matrix, multiply_matrix
-from core import translation, scaling, rotation_z
+from core import translation, scaling, rotation_z, rotation_y
 from shapes import Material, Shape
 
 
@@ -39,9 +39,23 @@ def step_set_transform_of_s_to_translation_matrix(context, x, y, z):
     context.s.set_transform(translation(x, y, z))
 
 
-@when(u'set_transform(s, scaling({x:g}, {y:g}, {z:g}))')
-def step_set_transform_of_s_to_scaling_matrix(context, x, y, z):
-    context.s.set_transform(scaling(x, y, z))
+@when(u'set_transform({shape_var}, scaling({x:g}, {y:g}, {z:g}))')
+def step_set_transform_of_shape_to_scaling_matrix(context, shape_var, x, y, z):
+    shape = getattr(context, shape_var, None)
+    shape.set_transform(scaling(x, y, z))
+
+
+@when(u'set_transform({shape_var}, rotation_y({value}))')
+def step_set_transform_of_shape_to_rotation_y_matrix(context, shape_var,
+                                                     value):
+    shape = getattr(context, shape_var, None)
+
+    if value == 'pi/2':
+        angle = pi / 2
+    else:
+        angle = float(value)
+
+    shape.set_transform(rotation_y(angle))
 
 
 @when(u's.material <- m')
@@ -69,6 +83,29 @@ def step_assign_normal_of_s_at_certain_point_to_n(context):
 def step_assign_normal_of_s_at_another_point_to_n(context):
     xyz = sqrt(2) / 2
     context.n = context.s.normal_at(point(0, xyz, -xyz))
+
+
+@when(u'p <- world_to_object(s, point({x:g}, {y:g}, {z:g}))')
+def step_assign_world_to_object_of_point_to_p(context, x, y, z):
+    context.p = context.s.world_to_object(point(x, y, z))
+
+
+@when(u'n <- normal_to_world(s, vector(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3))')
+def step_assign_normal_to_world_of_vector_to_p(context):
+    xyz = sqrt(3) / 3
+    context.n = context.s.normal_to_world(vector(xyz, xyz, xyz))
+
+
+@then(u's.parent is nothing')
+def step_assert_parent_of_s_is_nothing(context):
+    assert context.s.parent is None, \
+            f"{context.s.parent} is not None"
+
+
+@then(u's.parent = g')
+def step_assert_parent_of_s_equals_g(context):
+    assert context.s.parent == context.g, \
+            f"{context.s.parent} is not {context.g}"
 
 
 @then(u's.transform = identity_matrix')
@@ -109,3 +146,8 @@ def step_assert_saved_ray_direction_equals_vector(context, x, y, z):
 @then(u'n = normalize(n)')
 def step_assert_n_equals_normalized_n(context):
     assert_tuple(context.n, normalize(context.n))
+
+
+@then(u'p = point({x:g}, {y:g}, {z:g})')
+def step_assert_p_equals_point(context, x, y, z):
+    assert_tuple(context.p, point(x, y, z))

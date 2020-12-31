@@ -11,7 +11,9 @@ TRANSFORMATIONS = {
     'translation(0, 0, 1)': translation(0, 0, 1),
     'translation(0, -1, 0)': translation(0, -1, 0),
     'translation(0, 1, 0)': translation(0, 1, 0),
-    'translation(0, -3.5, -0.5)': translation(0, -3.5, -0.5)
+    'translation(0, -3.5, -0.5)': translation(0, -3.5, -0.5),
+    'translation(0, 0, -3)': translation(0, 0, -3),
+    'translation(5, 0, 0)': translation(5, 0, 0)
 }
 
 
@@ -58,6 +60,12 @@ def step_create_sphere_s1_with(context):
 def step_create_sphere_s2_with(context):
     context.s2 = Sphere()
     set_shape_attributes(context.s2, context.table)
+
+
+@given(u's3 <- sphere() with')
+def step_create_sphere_s3_with(context):
+    context.s3 = Sphere()
+    set_shape_attributes(context.s3, context.table)
 
 
 @given(u'p <- plane() with')
