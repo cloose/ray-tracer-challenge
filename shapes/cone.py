@@ -1,6 +1,6 @@
 from math import inf, sqrt
-from core import Intersection, vector
-from .shape import Shape
+from core import Intersection, vector, transform_from_yaml
+from .shape import Shape, Material
 
 
 class Cone(Shape):
@@ -10,6 +10,27 @@ class Cone(Shape):
         self.minimum = -inf
         self.maximum = inf
         self.closed = False
+
+    @classmethod
+    def from_yaml(cls, data):
+        cone = cls()
+
+        if 'min' in data:
+            cone.minimum = data['min']
+
+        if 'max' in data:
+            cone.maximum = data['max']
+
+        if 'closed' in data:
+            cone.closed = data['closed']
+
+        if 'transform' in data:
+            cone.set_transform(transform_from_yaml(data))
+
+        if 'material' in data:
+            cone.material = Material.from_yaml(data)
+
+        return cone
 
     def local_intersect(self, local_ray):
         a = local_ray.direction[0]**2 - \
