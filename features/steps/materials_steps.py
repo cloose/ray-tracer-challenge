@@ -3,7 +3,7 @@ from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float, assert_tuple
 from core import point, color, vector, lighting
 from shapes import Material
-from patterns import StripePattern
+from patterns import CheckersPattern, StripePattern, RingPattern, GradientPattern
 
 
 @given(u'm <- material()')
@@ -118,3 +118,35 @@ def step_assert_color_of_c1(context, red, green, blue):
 @then(u'c2 = color({red:g}, {green:g}, {blue:g})')
 def step_assert_color_of_c2(context, red, green, blue):
     assert_tuple(context.c2, color(red, green, blue))
+
+
+@then(u'm.pattern = stripe_pattern(color(1, 1, 1), color(0, 0, 0))')
+def step_assert_pattern_of_m_is_stripe_pattern(context):
+    assert isinstance(context.m.pattern, StripePattern), \
+        f"{context.m.pattern.__class__.__name__} is not StripePattern"
+    assert_tuple(context.m.pattern.color_a, color(1, 1, 1))
+    assert_tuple(context.m.pattern.color_b, color(0, 0, 0))
+
+
+@then(u'm.pattern = checkers_pattern(color(1, 1, 1), color(0, 0, 0))')
+def step_assert_pattern_of_m_is_checkers_pattern(context):
+    assert isinstance(context.m.pattern, CheckersPattern), \
+        f"{context.m.pattern.__class__.__name__} is not CheckersPattern"
+    assert_tuple(context.m.pattern.color_a, color(1, 1, 1))
+    assert_tuple(context.m.pattern.color_b, color(0, 0, 0))
+
+
+@then(u'm.pattern = ring_pattern(color(1, 1, 1), color(0, 0, 0))')
+def step_assert_pattern_of_m_is_ring_pattern(context):
+    assert isinstance(context.m.pattern, RingPattern), \
+        f"{context.m.pattern.__class__.__name__} is not RingPattern"
+    assert_tuple(context.m.pattern.color_a, color(1, 1, 1))
+    assert_tuple(context.m.pattern.color_b, color(0, 0, 0))
+
+
+@then(u'm.pattern = gradient_pattern(color(1, 1, 1), color(0, 0, 0))')
+def step_assert_pattern_of_m_is_gradient_pattern(context):
+    assert isinstance(context.m.pattern, GradientPattern), \
+        f"{context.m.pattern.__class__.__name__} is not GradientPattern"
+    assert_tuple(context.m.pattern.color_a, color(1, 1, 1))
+    assert_tuple(context.m.pattern.color_b, color(0, 0, 0))

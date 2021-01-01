@@ -36,6 +36,58 @@ Scenario: Creating a material from yaml
   And m.transparency = 0.4
   And m.refractive_index = 1.5
 
+Scenario: Creating a material with stripe pattern from yaml
+  Given data <- yaml:
+  """
+  material:
+     pattern:
+       type: stripes
+       colors:
+         - [1, 1, 1]
+         - [0, 0, 0]
+  """
+  When m <- Material.from_yaml(data)
+  Then m.pattern = stripe_pattern(color(1, 1, 1), color(0, 0, 0))
+
+Scenario: Creating a material with checkers pattern from yaml
+  Given data <- yaml:
+  """
+  material:
+     pattern:
+       type: checkers
+       colors:
+         - [1, 1, 1]
+         - [0, 0, 0]
+  """
+  When m <- Material.from_yaml(data)
+  Then m.pattern = checkers_pattern(color(1, 1, 1), color(0, 0, 0))
+
+Scenario: Creating a material with ring pattern from yaml
+  Given data <- yaml:
+  """
+  material:
+     pattern:
+       type: ring
+       colors:
+         - [1, 1, 1]
+         - [0, 0, 0]
+  """
+  When m <- Material.from_yaml(data)
+  Then m.pattern = ring_pattern(color(1, 1, 1), color(0, 0, 0))
+
+Scenario: Creating a material with gradient pattern from yaml
+  Given data <- yaml:
+  """
+  material:
+     pattern:
+       type: gradient
+       colors:
+         - [1, 1, 1]
+         - [0, 0, 0]
+  """
+  When m <- Material.from_yaml(data)
+  Then m.pattern = gradient_pattern(color(1, 1, 1), color(0, 0, 0))
+
 Scenario: Lighting with the eye between the light and the surface
   Given v1 <- vector(0, 0, -1)
   And v2 <- vector(0, 0, -1)

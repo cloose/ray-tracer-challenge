@@ -1,4 +1,12 @@
 from core import color
+from patterns import CheckersPattern, GradientPattern, RingPattern, StripePattern
+
+_TYPE_MAP = {
+    'checkers': CheckersPattern.from_yaml,
+    'gradient': GradientPattern.from_yaml,
+    'ring': RingPattern.from_yaml,
+    'stripes': StripePattern.from_yaml
+}
 
 
 class Material:
@@ -18,6 +26,13 @@ class Material:
         material = cls()
 
         material_data = data['material']
+        if 'pattern' in material_data:
+            pattern_type = material_data['pattern']['type']
+            parse_method = _TYPE_MAP.get(pattern_type)
+            if parse_method is None:
+                raise ValueError(f"Unknown type '{pattern_type}'")
+            material.pattern = parse_method(material_data)
+
         if 'color' in material_data:
             values = material_data['color']
             material.color = color(values[0], values[1], values[2])
