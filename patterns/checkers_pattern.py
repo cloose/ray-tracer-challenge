@@ -12,7 +12,10 @@ class CheckersPattern(Pattern):
 
     def pattern_at(self, point):
         """"""
-        if (floor(point[0]) + floor(point[1]) + floor(point[2])) % 2 == 0.0:
+        x = abs(point[0])
+        y = abs(point[1])
+        z = abs(point[2])
+        if (floor(x) + floor(y) + floor(z)) % 2 == 0.0:
             return self.color_a
 
         return self.color_b

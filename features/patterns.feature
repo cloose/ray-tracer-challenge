@@ -103,3 +103,9 @@ Scenario: Checkers should repeat in z
   Then pattern_at(pattern, point(0, 0, 0)) = "white"
   And pattern_at(pattern, point(0, 0, 0.99)) = "white"
   And pattern_at(pattern, point(0, 0, 1.01)) = "black"
+  
+  Scenario: Checkers should not repeat if y near zero
+    Given pattern <- checkers_pattern(white, black)
+    Then pattern_at(pattern, point(0, 1e-12, 0.99)) = "white"
+    And pattern_at(pattern, point(0, 0, 0.99)) = "white"
+    And pattern_at(pattern, point(0, -1e-12, 0.99)) = "white"
