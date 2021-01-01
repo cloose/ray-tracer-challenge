@@ -27,10 +27,16 @@ class CheckersPattern(Pattern):
 
     def pattern_at(self, point):
         """"""
-        x = abs(point[0])
-        y = abs(point[1])
-        z = abs(point[2])
+        x = self.near_zero(point[0])
+        y = self.near_zero(point[1])
+        z = self.near_zero(point[2])
         if (floor(x) + floor(y) + floor(z)) % 2 == 0.0:
             return self.color_a
 
         return self.color_b
+
+    def near_zero(self, pos):
+        if abs(pos) < 1e-9:
+            return 0.0
+
+        return pos
