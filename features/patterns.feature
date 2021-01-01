@@ -141,3 +141,19 @@ Scenario: Checkers should repeat in z
     Then pattern.a = white
     And pattern.b = black
     And pattern.transform = translation(1, 5, 0)
+
+  Scenario: Creating a ring pattern from yaml
+    Given data <- yaml:
+    """
+    pattern:
+      type: ring
+      colors:
+        - [1, 1, 1]
+        - [0, 0, 0]
+      transform:
+        - [ translate, 1, 5, 0 ]
+    """
+    When pattern <- RingPattern.from_yaml(data)
+    Then pattern.a = white
+    And pattern.b = black
+    And pattern.transform = translation(1, 5, 0)
