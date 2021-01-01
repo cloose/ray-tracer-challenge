@@ -37,6 +37,12 @@ class Material:
         if 'reflective' in material_data:
             material.reflective = material_data['reflective']
 
+        if 'transparency' in material_data:
+            material.transparency = material_data['transparency']
+
+        if 'refractive-index' in material_data:
+            material.refractive_index = material_data['refractive-index']
+
         return material
 
     def __eq__(self, other):

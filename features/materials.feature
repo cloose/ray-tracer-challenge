@@ -23,6 +23,8 @@ Scenario: Creating a material from yaml
     specular: 0.3
     shininess: 300
     reflective: 0.1
+    transparency: 0.4
+    refractive-index: 1.5
   """"
   When m <- Material.from_yaml(data)
   Then m.color = color(0.9, 0.4, 0.6)
@@ -31,7 +33,8 @@ Scenario: Creating a material from yaml
   And m.specular = 0.3
   And m.shininess = 300.0
   And m.reflective = 0.1
-
+  And m.transparency = 0.4
+  And m.refractive_index = 1.5
 
 Scenario: Lighting with the eye between the light and the surface
   Given v1 <- vector(0, 0, -1)
