@@ -110,6 +110,22 @@ Scenario: Checkers should repeat in z
     And pattern_at(pattern, point(0, 0, 0.99)) = "white"
     And pattern_at(pattern, point(0, -1e-12, 0.99)) = "white"
 
+  Scenario: Creating a stripe pattern from yaml
+    Given data <- yaml:
+    """
+    pattern:
+      type: stripes
+      colors:
+        - [1, 1, 1]
+        - [0, 0, 0]
+      transform:
+        - [ translate, 1, 5, 0 ]
+    """
+    When pattern <- StripePattern.from_yaml(data)
+    Then pattern.a = white
+    And pattern.b = black
+    And pattern.transform = translation(1, 5, 0)
+
   Scenario: Creating a checkers pattern from yaml
     Given data <- yaml:
     """

@@ -66,6 +66,11 @@ def step_set_transform_of_pattern_to_translation_matrix(context, x, y, z):
     context.pattern.set_transform(translation(x, y, z))
 
 
+@when(u'pattern <- StripePattern.from_yaml(data)')
+def step_create_stripe_pattern_from_yaml(context):
+    context.pattern = StripePattern.from_yaml(context.data)
+
+
 @when(u'pattern <- CheckersPattern.from_yaml(data)')
 def step_create_checkers_pattern_from_yaml(context):
     context.pattern = CheckersPattern.from_yaml(context.data)
