@@ -1,5 +1,24 @@
 Feature: Cylinder
 
+  Scenario: Creating a cylinder from yaml
+    Given data <- yaml:
+    """"
+    add: cylinder
+    min: 1
+    max: 2
+    closed: true
+    transform:
+      - [ translate, 0, 5, 0 ]
+    material:
+      color: [1, 0.3, 0.2]
+    """"
+    When c <- Cylinder.from_yaml(data)
+    Then c.minimum = 1
+    And c.maximum = 2
+    And c.closed = true
+    And c.transform = translation(0, 5, 0)
+    And c.material.color = color(1, 0.3, 0.2)
+
   Scenario Outline: A ray misses a cylinder
     Given c <- cylinder()
     And r <- ray(<origin>, <direction>)

@@ -16,6 +16,15 @@ class Cylinder(Shape):
     def from_yaml(cls, data):
         cylinder = cls()
 
+        if 'min' in data:
+            cylinder.minimum = data['min']
+
+        if 'max' in data:
+            cylinder.maximum = data['max']
+
+        if 'closed' in data:
+            cylinder.closed = data['closed']
+
         if 'transform' in data:
             cylinder.set_transform(transform_from_yaml(data))
 
