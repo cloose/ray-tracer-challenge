@@ -81,6 +81,11 @@ def step_create_ring_pattern_from_yaml(context):
     context.pattern = RingPattern.from_yaml(context.data)
 
 
+@when(u'pattern <- GradientPattern.from_yaml(data)')
+def step_create_gradient_pattern_from_yaml(context):
+    context.pattern = GradientPattern.from_yaml(context.data)
+
+
 @when(u'c <- pattern_at_shape(pattern, s, point({x:g}, {y:g}, {z:g}))')
 def step_set_c_to_color_of_pattern_at_point(context, x, y, z):
     context.c = context.pattern.pattern_at_shape(context.s, point(x, y, z))
