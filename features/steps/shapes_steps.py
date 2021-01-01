@@ -34,9 +34,11 @@ def step_set_transform_of_s_to_m(context):
     context.s.set_transform(context.m)
 
 
-@when(u'set_transform(s, translation({x:g}, {y:g}, {z:g}))')
-def step_set_transform_of_s_to_translation_matrix(context, x, y, z):
-    context.s.set_transform(translation(x, y, z))
+@when(u'set_transform({shape_var}, translation({x:g}, {y:g}, {z:g}))')
+def step_set_transform_of_shape_to_translation_matrix(context, shape_var, x, y,
+                                                      z):
+    shape = getattr(context, shape_var, None)
+    shape.set_transform(translation(x, y, z))
 
 
 @when(u'set_transform({shape_var}, scaling({x:g}, {y:g}, {z:g}))')

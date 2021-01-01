@@ -1,5 +1,5 @@
 from behave import given, when, then  # pylint: disable=no-name-in-module
-from asserts import assert_tuple
+from asserts import assert_tuple, assert_matrix
 from core import color, point
 from patterns import Pattern, StripePattern, GradientPattern, RingPattern, CheckersPattern
 from core import identity_matrix
@@ -66,6 +66,11 @@ def step_set_transform_of_pattern_to_translation_matrix(context, x, y, z):
     context.pattern.set_transform(translation(x, y, z))
 
 
+@when(u'pattern <- CheckersPattern.from_yaml(data)')
+def step_create_checkers_pattern_from_yaml(context):
+    context.pattern = CheckersPattern.from_yaml(context.data)
+
+
 @when(u'c <- pattern_at_shape(pattern, s, point({x:g}, {y:g}, {z:g}))')
 def step_set_c_to_color_of_pattern_at_point(context, x, y, z):
     context.c = context.pattern.pattern_at_shape(context.s, point(x, y, z))
@@ -106,10 +111,10 @@ def step_assert_color_c_equals_white(context):
 
 @then(u'pattern.transform = identity_matrix')
 def step_assert_transform_of_pattern_equals_identity_matrix(context):
-    assert context.pattern.transform() == identity_matrix()
+    assert_matrix(context.pattern.transform(), identity_matrix())
 
 
 @then(u'pattern.transform = translation({x:g}, {y:g}, {z:g})')
 def step_assert_transform_of_pattern_equals_translation_matrix(
     context, x, y, z):
-    assert context.pattern.transform() == translation(x, y, z)
+    assert_matrix(context.pattern.transform(), translation(x, y, z))
