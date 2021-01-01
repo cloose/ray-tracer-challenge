@@ -1,4 +1,4 @@
-from shapes import Cube, Plane, Sphere
+from shapes import Cone, Cube, Cylinder, Plane, Sphere
 from lights import PointLight
 from .world import World
 from .camera import Camera
@@ -6,7 +6,9 @@ from .camera import Camera
 _TYPE_MAP = {
     'camera': Camera.from_yaml,
     'light': PointLight.from_yaml,
+    'cone': Cone.from_yaml,
     'cube': Cube.from_yaml,
+    'cylinder': Cylinder.from_yaml,
     'plane': Plane.from_yaml,
     'sphere': Sphere.from_yaml
 }

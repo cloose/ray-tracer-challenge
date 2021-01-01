@@ -34,6 +34,11 @@ def step_create_point_p2(context, x, y, z):
     context.p2 = point(x, y, z)
 
 
+@given(u'p3 <- point({x:g}, {y:g}, {z:g})')
+def step_create_point_p3(context, x, y, z):
+    context.p3 = point(x, y, z)
+
+
 @given(u'to <- point({x:g}, {y:g}, {z:g})')
 def step_create_point_to(context, x, y, z):
     context.to = point(x, y, z)
