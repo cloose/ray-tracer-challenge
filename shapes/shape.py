@@ -45,10 +45,10 @@ class Shape:
     def local_intersect(self, local_ray):
         raise NotImplementedError('subclass must override local_intersect')
 
-    def normal_at(self, world_point):
+    def normal_at(self, world_point, hit=None):
         local_point = self.world_to_object(world_point)
-        local_normal = self.local_normal_at(local_point)
+        local_normal = self.local_normal_at(local_point, hit)
         return self.normal_to_world(local_normal)
 
-    def local_normal_at(self, local_point):
+    def local_normal_at(self, local_point, hit=None):
         raise NotImplementedError('subclass must override local_normal_at')

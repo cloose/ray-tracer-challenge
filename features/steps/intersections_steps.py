@@ -1,13 +1,7 @@
 from math import sqrt
 from behave import given, when, then  # pylint: disable=no-name-in-module
+from asserts import assert_float
 from core import Intersection, hit
-
-INTERSECTION_BY_NAME = {
-    'i1': lambda context: context.i1,
-    'i2': lambda context: context.i2,
-    'i3': lambda context: context.i3,
-    'i4': lambda context: context.i4,
-}
 
 OBJECT_BY_NAME = {
     's': lambda context: context.s,
@@ -39,8 +33,8 @@ def create_intersections_from_string(context, intersections):
                 Intersection(pos_num,
                              OBJECT_BY_NAME.get(obj)(context)))
         else:
-            print(part)
-            result.append(INTERSECTION_BY_NAME.get(part)(context))
+            var = getattr(context, part, None)
+            result.append(var)
 
     return result
 
@@ -92,9 +86,17 @@ def step_impl(context, t):
     context.i = Intersection(t, context.s)
 
 
-@when(u'xs <- intersections(i1, i2)')
-def step_impl(context):
-    context.xs = [context.i1, context.i2]
+@when(u'i <- intersection_with_uv({t:g}, {obj_name}, {u:g}, {v:g})')
+def step_create_intersection_i_with_uv(context, t, obj_name, u, v):
+    obj = getattr(context, obj_name, None)
+    context.i = Intersection(t, obj, u, v)
+
+
+@when(u'xs <- intersections({intersection_list})')
+def step_assign_intersections_from_list_to_xs(context, intersection_list):
+    intersections = create_intersections_from_string(context,
+                                                     intersection_list)
+    context.xs = intersections
 
 
 @when(u'i <- hit(xs)')
@@ -110,6 +112,16 @@ def step_impl(context, expected):
 @then(u'i.object = s')
 def step_impl(context):
     assert context.i.object == context.s, f"{context.i.object} is not {context.s}"
+
+
+@then(u'i.u = {expected:g}')
+def step_assert_u_of_intersection_i(context, expected):
+    assert_float(context.i.u, expected)
+
+
+@then(u'i.v = {expected:g}')
+def step_assert_v_of_intersection_i(context, expected):
+    assert_float(context.i.v, expected)
 
 
 @then(u'i is nothing')

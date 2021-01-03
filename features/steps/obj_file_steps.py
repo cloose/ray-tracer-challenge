@@ -1,6 +1,6 @@
 from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_tuple
-from core import point
+from core import point, vector
 from scene import parse_obj_file
 
 
@@ -66,6 +66,11 @@ def step_assert_vertex_at_index(context, index, x, y, z):
     assert_tuple(context.parser.vertices[index], point(x, y, z))
 
 
+@then(u'parser.normals[{index:d}] = vector({x:g}, {y:g}, {z:g})')
+def step_assert_normal_at_index(context, index, x, y, z):
+    assert_tuple(context.parser.normals[index], vector(x, y, z))
+
+
 @then(u'{triangle_name}.{point_name} = parser.vertices[{index:d}]')
 def step_assert_point_of_triangle_equals_vertex(context, triangle_name,
                                                 point_name, index):
@@ -74,8 +79,26 @@ def step_assert_point_of_triangle_equals_vertex(context, triangle_name,
     assert_tuple(p, context.parser.vertices[index])
 
 
+@then(u'{triangle_name}.{normal_name} = parser.normals[{index:d}]')
+def step_assert_normal_of_triangle_equals_vector(context, triangle_name,
+                                                 normal_name, index):
+    triangle = getattr(context, triangle_name, None)
+    n = getattr(triangle, normal_name, None)
+    assert_tuple(n, context.parser.normals[index])
+
+
 @then(u'g includes "{group_name}" from parser')
 def step_assert_g_includes_group_of_name(context, group_name):
     expected = context.parser.groups[group_name]
     assert expected in context.g.children, \
             f"{context.g.children} does not include {expected}"
+
+
+@then(u't2 = t1')
+def step_assert_triangles_t2_t1_are_equal(context):
+    assert_tuple(context.t2.p1, context.t1.p1)
+    assert_tuple(context.t2.p2, context.t1.p2)
+    assert_tuple(context.t2.p3, context.t1.p3)
+    assert_tuple(context.t2.n1, context.t1.n1)
+    assert_tuple(context.t2.n2, context.t1.n2)
+    assert_tuple(context.t2.n3, context.t1.n3)

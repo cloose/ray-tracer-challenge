@@ -28,5 +28,5 @@ class Plane(Shape):
         t = -local_ray.origin[1] / local_ray.direction[1]
         return [Intersection(t, self)]
 
-    def local_normal_at(self, local_point):
+    def local_normal_at(self, local_point, hit=None):
         return vector(0, 1, 0)

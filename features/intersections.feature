@@ -48,3 +48,9 @@ Scenario: The hit is always the lowest nonnegative intersection
   And xs <- intersections(i1, i2, i3, i4)
   When i <- hit(xs)
   Then i = i4
+
+  Scenario: An intersection can encapsulate `u` and `v`
+    Given t <- triangle(point(0, 1, 0), point(-1, 0, 0), point(1, 0, 0))
+    When i <- intersection_with_uv(3.5, t, 0.2, 0.4)
+    Then i.u = 0.2
+    And i.v = 0.4

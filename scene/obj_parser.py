@@ -1,4 +1,4 @@
-from core import point
+from core import point, vector
 from shapes import Group, Triangle, Material
 from .obj_file import ObjFile
 
@@ -18,16 +18,22 @@ def parse_obj_file(content, material=Material()):
         if parts[0] == "v":
             obj_file.vertices.append(
                 point(float(parts[1]), float(parts[2]), float(parts[3])))
+        elif parts[0] == "vn":
+            obj_file.normals.append(
+                vector(float(parts[1]), float(parts[2]), float(parts[3])))
         elif parts[0] == "g":
             current_group = Group()
             obj_file.groups[parts[1]] = current_group
         elif parts[0] == "f":
             vertices = [None]
+            normals = [None]
             for index in range(1, len(parts)):
-                i = to_int(parts[index])
-                vertices.append(obj_file.vertices[i])
+                v, vt, vn = to_ints(parts[index])
+                vertices.append(obj_file.vertices[v])
+                if vn:
+                    normals.append(obj_file.normals[vn])
 
-            triangles = fan_triangulation(vertices, material)
+            triangles = fan_triangulation(vertices, normals, material)
 
             for triangle in triangles:
                 current_group.add_child(triangle)
@@ -37,17 +43,33 @@ def parse_obj_file(content, material=Material()):
     return obj_file
 
 
-def to_int(index):
+def to_ints(index):
     parts = index.split('/')
-    return int(parts[0])
+
+    v = int(parts[0])
+
+    vt = None
+    if len(parts) > 1 and parts[1]:
+        vt = int(parts[1])
+
+    vn = None
+    if len(parts) > 1 and parts[2]:
+        vn = int(parts[2])
+
+    return (v, vt, vn)
 
 
 # vertices is a 1-based array of at least three vertices
-def fan_triangulation(vertices, material):
+def fan_triangulation(vertices, normals, material):
     triangles = []
 
     for index in range(2, len(vertices) - 1):
-        tri = Triangle(vertices[1], vertices[index], vertices[index + 1])
+        if len(normals) > 1:
+            tri = Triangle.smooth_triangle(vertices[1], vertices[index],
+                                           vertices[index + 1], normals[1],
+                                           normals[index], normals[index + 1])
+        else:
+            tri = Triangle(vertices[1], vertices[index], vertices[index + 1])
         tri.material = material
         triangles.append(tri)
 

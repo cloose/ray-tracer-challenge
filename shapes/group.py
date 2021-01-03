@@ -16,5 +16,5 @@ class Group(Shape):
             xs for child in self.children for xs in child.intersect(local_ray)
         ])
 
-    def local_normal_at(self, local_point):
+    def local_normal_at(self, local_point, hit=None):
         raise NotImplementedError('groups do not support local_normal_at')

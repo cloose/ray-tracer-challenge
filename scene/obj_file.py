@@ -5,6 +5,7 @@ class ObjFile:
     def __init__(self):
         self.ignored = 0
         self.vertices = [None]
+        self.normals = [None]
         self.groups = {"default": Group()}
 
     def obj_group(self):

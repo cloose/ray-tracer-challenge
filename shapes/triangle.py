@@ -1,13 +1,18 @@
-from core import Intersection, subtract, cross, dot, normalize
+from core import Intersection, add, subtract, multiply, cross, dot, normalize
 from .shape import Shape
 
 
 class Triangle(Shape):
-    def __init__(self, p1, p2, p3):
+    def __init__(self, p1, p2, p3, n1=None, n2=None, n3=None):
         super().__init__()
         self.p1 = p1
         self.p2 = p2
         self.p3 = p3
+        self.n1 = n1
+        self.n2 = n2
+        self.n3 = n3
+
+        self.smoothed = False
 
         # pre-compute edge vectors
         self.e1 = subtract(p2, p1)
@@ -15,6 +20,12 @@ class Triangle(Shape):
 
         # pre-compute normal
         self.normal = normalize(cross(self.e2, self.e1))
+
+    @classmethod
+    def smooth_triangle(cls, p1, p2, p3, n1, n2, n3):
+        triangle = cls(p1, p2, p3, n1, n2, n3)
+        triangle.smoothed = True
+        return triangle
 
     def local_intersect(self, local_ray):
         dir_cross_e2 = cross(local_ray.direction, self.e2)
@@ -34,7 +45,17 @@ class Triangle(Shape):
             return []
 
         t = f * dot(self.e2, origin_cross_e1)
+
+        if self.smoothed:
+            return [Intersection(t, self, u, v)]
+
         return [Intersection(t, self)]
 
-    def local_normal_at(self, local_point):
+    def local_normal_at(self, local_point, hit=None):
+        if self.smoothed:
+            return add(
+                multiply(self.n2, hit.u),
+                add(multiply(self.n3, hit.v),
+                    multiply(self.n1, (1 - hit.u - hit.v))))
+
         return self.normal

@@ -104,7 +104,7 @@ class Cone(Shape):
         z = ray.origin[2] + t * ray.direction[2]
         return (x**2 + z**2) <= radius**2
 
-    def local_normal_at(self, local_point):
+    def local_normal_at(self, local_point, hit=None):
         # compute the square of the distance from the y axis
         dist = local_point[0]**2 + local_point[2]**2
 

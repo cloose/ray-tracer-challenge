@@ -15,7 +15,7 @@ class TestShape(Shape):
     def local_intersect(self, local_ray):
         self.saved_ray = local_ray
 
-    def local_normal_at(self, local_point):
+    def local_normal_at(self, local_point, hit=None):
         return vector(local_point[0], local_point[1], local_point[2])
 
 

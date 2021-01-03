@@ -14,7 +14,7 @@ class Hit:
 
         self.point = ray.position_at(self.t)
         self.eyev = negate(ray.direction)
-        self.normalv = self.object.normal_at(self.point)
+        self.normalv = self.object.normal_at(self.point, intersection)
 
         self.inside = dot(self.normalv, self.eyev) < 0
         if self.inside:

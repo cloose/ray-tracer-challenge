@@ -39,5 +39,5 @@ class Sphere(Shape):
         i2 = Intersection(t2, self)
         return [i1, i2]
 
-    def local_normal_at(self, local_point):
+    def local_normal_at(self, local_point, hit=None):
         return subtract(local_point, point(0, 0, 0))

@@ -16,6 +16,11 @@ def step_assign_hit_at_index_r_to_shape_hit(context, index):
     context.shape_hit = Hit(context.xs[index], context.r, context.xs)
 
 
+@when(u'shape_hit <- hit(i, r, xs)')
+def step_assign_hit_at_i_r_to_shape_hit(context):
+    context.shape_hit = Hit(context.i, context.r, context.xs)
+
+
 @when(u'shape_hit <- hit(i1, r, xs)')
 def step_assign_hit_at_i1_r_to_shape_hit(context):
     context.shape_hit = Hit(context.i1, context.r, context.xs)

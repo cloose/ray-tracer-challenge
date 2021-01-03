@@ -53,7 +53,7 @@ class Cube(Shape):
 
         return (tmin, tmax)
 
-    def local_normal_at(self, local_point):
+    def local_normal_at(self, local_point, hit=None):
         maxc = max(abs(local_point[0]), abs(local_point[1]),
                    abs(local_point[2]))
 
