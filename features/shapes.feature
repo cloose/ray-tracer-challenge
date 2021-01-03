@@ -4,6 +4,12 @@ Feature: shapes
     Given s <- test_shape()
     Then s.parent is nothing
 
+  Scenario: A shape A includes another shape if same instance
+    Given A <- test_shape()
+    And B <- test_shape()
+    Then A includes A
+    And A not includes B
+
   Scenario: A shape's default transformation
     Given s <- test_shape()
     Then s.transform = identity_matrix

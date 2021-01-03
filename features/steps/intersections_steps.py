@@ -3,16 +3,6 @@ from behave import given, when, then  # pylint: disable=no-name-in-module
 from asserts import assert_float
 from core import Intersection, hit
 
-OBJECT_BY_NAME = {
-    's': lambda context: context.s,
-    's1': lambda context: context.s1,
-    's2': lambda context: context.s2,
-    'p': lambda context: context.p,
-    'A': lambda context: context.A,
-    'B': lambda context: context.B,
-    'C': lambda context: context.C,
-}
-
 
 def create_intersections_from_string(context, intersections):
     result = []
@@ -29,9 +19,8 @@ def create_intersections_from_string(context, intersections):
                 pos_num = sqrt(2)
             else:
                 pos_num = float(pos)
-            result.append(
-                Intersection(pos_num,
-                             OBJECT_BY_NAME.get(obj)(context)))
+            var = getattr(context, obj, None)
+            result.append(Intersection(pos_num, var))
         else:
             var = getattr(context, part, None)
             result.append(var)

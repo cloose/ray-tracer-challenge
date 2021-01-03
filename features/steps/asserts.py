@@ -1,6 +1,12 @@
 _EPSILON = 0.00001
 
 
+def assert_count(collection, count):
+    """Asserts number of items in the collection."""
+    assert len(collection) == count, \
+            f"count {len(collection)} is not equal to {count}"
+
+
 def assert_float(actual, expected):
     """Asserts that two floats are equal."""
     assert equal(actual, expected), \

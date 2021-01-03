@@ -51,8 +51,3 @@ def step_assert_group_g_is_empty(context):
 def step_assert_group_g_is_not_empty(context):
     assert context.g.children, \
             f"children is empty: {context.g.children}"
-
-
-@then(u'g includes s')
-def step_assert_group_g_includes_shape_s(context):
-    assert context.s in context.g.children

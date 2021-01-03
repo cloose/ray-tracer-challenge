@@ -52,3 +52,6 @@ class Shape:
 
     def local_normal_at(self, local_point, hit=None):
         raise NotImplementedError('subclass must override local_normal_at')
+
+    def includes(self, other):
+        return self == other

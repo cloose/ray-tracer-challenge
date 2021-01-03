@@ -48,3 +48,11 @@ Feature: Groups
     And set_transform(s, translation(5, 0, 0))
     And xs <- intersect(g, r)
     Then xs.count = 2
+    
+  Scenario: A group includes another shape if child includes the shape
+    Given g <- group()
+    And s <- sphere()
+    And c <- cube()
+    When add_child(g, s)
+    Then g includes s
+    And g not includes c

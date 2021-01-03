@@ -54,6 +54,16 @@ def step_create_glass_sphere_s(context):
     context.s = glass_sphere()
 
 
+@given(u's1 <- sphere()')
+def step_create_sphere_s1(context):
+    context.s1 = Sphere()
+
+
+@given(u's2 <- sphere()')
+def step_create_sphere_s2(context):
+    context.s2 = Sphere()
+
+
 @given(u's2 <- glass_sphere() with')
 def step_create_glass_sphere_s2_with(context):
     context.s2 = glass_sphere()

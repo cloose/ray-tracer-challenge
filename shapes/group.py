@@ -18,3 +18,6 @@ class Group(Shape):
 
     def local_normal_at(self, local_point, hit=None):
         raise NotImplementedError('groups do not support local_normal_at')
+
+    def includes(self, other):
+        return any(item.includes(other) for item in self.children)

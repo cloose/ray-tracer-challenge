@@ -24,6 +24,16 @@ def step_create_test_shape_s(context):
     context.s = TestShape()
 
 
+@given(u'A <- test_shape()')
+def step_create_test_shape_a(context):
+    context.A = TestShape()
+
+
+@given(u'B <- test_shape()')
+def step_create_test_shape_b(context):
+    context.B = TestShape()
+
+
 @given(u'm <- scaling(1, 0.5, 1) * rotation_z(pi/5)')
 def step_create_scaling_rotation_z_matrix_m(context):
     context.m = multiply_matrix(scaling(1, 0.5, 1), rotation_z(pi / 5))
@@ -104,10 +114,26 @@ def step_assert_parent_of_s_is_nothing(context):
             f"{context.s.parent} is not None"
 
 
-@then(u's.parent = g')
-def step_assert_parent_of_s_equals_g(context):
-    assert context.s.parent == context.g, \
-            f"{context.s.parent} is not {context.g}"
+@then(u'{shape_name}.parent = {parent_name}')
+def step_assert_parent_of_s_equals_g(context, shape_name, parent_name):
+    shape = getattr(context, shape_name)
+    parent = getattr(context, parent_name)
+    assert shape.parent == parent, \
+            f"{shape.parent} is not {parent}"
+
+
+@then(u'{shape_a:w} includes {shape_b:w}')
+def step_assert_shape_includes(context, shape_a, shape_b):
+    a = getattr(context, shape_a)
+    b = getattr(context, shape_b)
+    assert a.includes(b)
+
+
+@then(u'{shape_a:w} not includes {shape_b:w}')
+def step_assert_shape_not_includes(context, shape_a, shape_b):
+    a = getattr(context, shape_a)
+    b = getattr(context, shape_b)
+    assert not a.includes(b)
 
 
 @then(u's.transform = identity_matrix')
