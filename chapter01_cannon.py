@@ -1,4 +1,4 @@
-from core import point, vector, add, normalize
+from core import add, normalize, point, vector
 
 
 def tick(env, proj):
@@ -12,8 +12,9 @@ def main():
     e = dict(gravity=vector(0, -0.1, 0), wind=vector(-0.01, 0, 0))
 
     while p['position'][1] > 0.0:
-        print('position %r, %r, %r' %
-              (p['position'][0], p['position'][1], p['position'][2]))
+        print(
+            f"position {p['position'][0]}, {p['position'][1]}, {p['position'][2]}"
+        )
         p = tick(e, p)
 
 

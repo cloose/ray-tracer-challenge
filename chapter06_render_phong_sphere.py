@@ -1,15 +1,13 @@
-from core import Canvas, Ray, point, color, normalize, subtract, negate, scaling, hit, lighting
-from shapes import Material, Sphere
+from core import (Canvas, Ray, color, hit, lighting, negate, normalize, point,
+                  scaling, subtract)
 from lights import PointLight
+from shapes import Material, Sphere
 
 
 def main():
     canvas_pixels = 500
     canvas = Canvas(canvas_pixels, canvas_pixels)
     shape = Sphere()
-
-    # shrink it along the y axis
-    shape.transform = scaling(1, 0.5, 1)
 
     # assign material
     shape.material = Material()
@@ -47,9 +45,8 @@ def main():
                                     normal)
                 canvas.set_pixel(x, y, px_color)
 
-    ppm = canvas.to_ppm()
-    f = open('render_phong_sphere.ppm', 'w')
-    f.write(ppm)
+    with open('render_phong_sphere.ppm', 'w') as out_file:
+        out_file.write(canvas.to_ppm())
 
 
 if __name__ == "__main__":

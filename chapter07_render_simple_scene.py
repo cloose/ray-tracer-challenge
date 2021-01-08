@@ -1,9 +1,10 @@
 from math import pi
-from core import point, vector, color, multiply_matrix
-from core import scaling, translation, rotation_x, rotation_y, view_transform
-from shapes import Material, Sphere
+
+from core import (color, multiply_matrix, point, rotation_x, rotation_y,
+                  scaling, translation, vector, view_transform)
 from lights import PointLight
-from scene import Camera, World, RayTracer
+from scene import Camera, RayTracer, World
+from shapes import Material, Sphere
 
 
 def render_simple_scene():
@@ -29,6 +30,7 @@ def render_simple_scene():
             multiply_matrix(
                 rotation_y(pi / 4),
                 multiply_matrix(rotation_x(pi / 2), scaling(10, 0.01, 10)))))
+    right_wall.material = floor.material
 
     middle = Sphere()
     middle.set_transform(translation(-0.5, 1, 0.5))
@@ -66,13 +68,11 @@ def render_simple_scene():
     camera = Camera(600, 500, pi / 3)
     camera.set_transform(
         view_transform(point(0, 1.5, -5), point(0, 1, 0), vector(0, 1, 0)))
-    # camera.set_transform(
-    # view_transform(point(0, 4, -1), point(0, 1, 0), vector(0, 1, 0)))
 
     canvas = RayTracer().render(camera, world)
-    ppm = canvas.to_ppm()
-    outf = open('render_simple_scene.ppm', 'w')
-    outf.write(ppm)
+
+    with open('render_simple_scene.ppm', 'w') as out_file:
+        out_file.write(canvas.to_ppm())
 
 
 if __name__ == "__main__":
