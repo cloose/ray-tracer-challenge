@@ -1,9 +1,9 @@
-from behave import given, when, then  # pylint: disable=no-name-in-module
-from asserts import assert_tuple, assert_float
-from core import color
-from core import scaling, translation
-from shapes import Plane, Sphere
+from behave import given, then, when  # pylint: disable=no-name-in-module
+
+from asserts import assert_float, assert_tuple
+from core import color, scaling, translation
 from scene import World
+from shapes import Plane, Sphere
 
 TRANSFORMATIONS = {
     'scaling(0.5, 0.5, 0.5)': scaling(0.5, 0.5, 0.5),
@@ -125,9 +125,14 @@ def step_add_p2_to_w(context):
     context.w.objects.append(context.p2)
 
 
-@when(u'w.light <- light')
-def step_set_light_of_w_to_light(context):
-    context.w.light = context.light
+@when(u'w.lights[{index:d}] <- light')
+def step_set_light_of_w_at_index_to_light(context, index):
+    context.w.lights[index] = context.light
+
+
+@when(u'w.add_light(light)')
+def step_add_light_to_w(context):
+    context.w.add_light(context.light)
 
 
 @when(u'c <- shade_hit(w, shape_hit)')
@@ -156,7 +161,8 @@ def step_set_c_to_reflected_color_w_shape_hit(context):
 
 
 @when(u'c <- reflected_color(w, shape_hit, {remaining:d})')
-def step_set_c_to_reflected_color_w_shape_hit(context, remaining):
+def step_set_c_to_reflected_color_w_shape_hit_with_remaining(
+    context, remaining):
     context.c = context.w.reflected_color(context.shape_hit, remaining)
 
 
@@ -172,13 +178,13 @@ def step_assert_w_has_no_objects(context):
 
 @then(u'w has no light source')
 def step_assert_w_has_no_light(context):
-    assert not context.w.light
+    assert not context.w.lights
 
 
-@then(u'w.light = light')
-def step_assert_w_has_light(context):
-    assert_tuple(context.w.light.position, context.light.position)
-    assert_tuple(context.w.light.intensity, context.light.intensity)
+@then(u'w.lights[{index:d}] = light')
+def step_assert_w_has_light(context, index):
+    assert_tuple(context.w.lights[index].position, context.light.position)
+    assert_tuple(context.w.lights[index].intensity, context.light.intensity)
 
 
 @then(u'w contains s1')
@@ -200,9 +206,10 @@ def step_assert_c_equals_s2_material_color(context):
     assert_tuple(context.c, context.s2.material.color)
 
 
-@then(u'is_shadowed(w, p) is {expected}')
-def step_assert_p_is_not_in_shaddow(context, expected):
-    assert context.w.is_shadowed(context.p) == (expected.lower() == "true")
+@then(u'is_shadowed(w, p, w.lights[{index:d}]) is {expected}')
+def step_assert_p_is_not_in_shaddow(context, index, expected):
+    assert context.w.is_shadowed(
+        context.p, context.w.lights[index]) == (expected.lower() == "true")
 
 
 @then(u'color_at(w, r) should terminate successfully')

@@ -63,7 +63,7 @@ def render_scene_with_plane():
     left.material.specular = 0.3
 
     world = World()
-    world.light = PointLight(point(-10, 10, -10), color(1, 1, 1))
+    world.add_light(PointLight(point(-10, 10, -10), color(1, 1, 1)))
     world.objects.append(floor)
     # world.objects.append(left_wall)
     # world.objects.append(right_wall)

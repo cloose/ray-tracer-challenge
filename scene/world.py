@@ -1,19 +1,22 @@
 from math import sqrt
-from shapes import Sphere, Material
-from core import Ray, Hit, point, color, add, subtract, magnitude, normalize, multiply, dot, \
-        scaling, hit as hit_at, lighting
+
+from core import Hit, Ray, add, color, dot
+from core import hit as hit_at
+from core import (lighting, magnitude, multiply, normalize, point, scaling,
+                  subtract)
 from lights import PointLight
+from shapes import Material, Sphere
 
 
 class World:
     def __init__(self):
-        self.light = None
+        self.lights = []
         self.objects = []
 
     @classmethod
     def default(cls):
         world = cls()
-        world.light = PointLight(point(-10, 10, -10), color(1, 1, 1))
+        world.add_light(PointLight(point(-10, 10, -10), color(1, 1, 1)))
 
         sphere1 = Sphere()
         mat = Material()
@@ -30,14 +33,22 @@ class World:
 
         return world
 
+    def add_light(self, light):
+        self.lights.append(light)
+
     def intersect(self, ray):
         return sorted(
             [xs for obj in self.objects for xs in obj.intersect(ray)])
 
     def shade_hit(self, hit, remaining=5):
-        shadowed = self.is_shadowed(hit.over_point)
-        surface = lighting(hit.object.material, hit.object, self.light,
-                           hit.point, hit.eyev, hit.normalv, shadowed)
+        surface = color(0, 0, 0)
+
+        for light in self.lights:
+            shadowed = self.is_shadowed(hit.over_point, light)
+            surface = add(
+                surface,
+                lighting(hit.object.material, hit.object, light, hit.point,
+                         hit.eyev, hit.normalv, shadowed))
 
         reflected = self.reflected_color(hit, remaining)
         refracted = self.refracted_color(hit, remaining)
@@ -59,7 +70,6 @@ class World:
         return self.shade_hit(shape_hit, remaining)
 
     def reflected_color(self, hit, remaining=5):
-        """"""
         if remaining <= 0:
             return color(0, 0, 0)
 
@@ -71,7 +81,6 @@ class World:
         return multiply(reflect_color, hit.object.material.reflective)
 
     def refracted_color(self, hit, remaining=5):
-        """"""
         if remaining <= 0:
             return color(0, 0, 0)
 
@@ -95,12 +104,12 @@ class World:
         return multiply(self.color_at(refract_ray, remaining - 1),
                         hit.object.material.transparency)
 
-    def is_shadowed(self, point):
-        vec = subtract(self.light.position, point)
+    def is_shadowed(self, hit_point, light):
+        vec = subtract(light.position, hit_point)
         distance = magnitude(vec)
         direction = normalize(vec)
 
-        ray = Ray(point, direction)
+        ray = Ray(hit_point, direction)
         intersections = self.intersect(ray)
         hit_intersection = hit_at(intersections)
         return hit_intersection is not None and hit_intersection.t < distance

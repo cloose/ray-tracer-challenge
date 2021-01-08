@@ -25,7 +25,21 @@ Feature: Scene Parser
     """
     And light <- point_light(point(-10, 10, -10), color(1, 1, 1))
     When w <- scene_from_yaml(data)
-    Then w.light = light 
+    Then w.lights[0] = light 
+
+  Scenario: Adds multipe light sources to world
+    Given data <- yaml:
+    """
+    - add: light
+      at: [-10, 10, -10]
+      intensity: [1, 1, 1]
+    - add: light
+      at: [0, 20, 0]
+      intensity: [0.2, 0.2, 0.2]
+    """
+    And light <- point_light(point(0, 20, 0), color(0.2, 0.2, 0.2))
+    When w <- scene_from_yaml(data)
+    Then w.lights[1] = light 
 
   Scenario: Adds shape to world
     Given data <- yaml:

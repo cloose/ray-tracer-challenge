@@ -16,7 +16,7 @@ Scenario: The default world
     | variable  | value                  |
     | transform | scaling(0.5, 0.5, 0.5) |
   And w <- default_world()
-  Then w.light = light
+  Then w.lights[0] = light
    And w contains s1
    And w contains s2
 
@@ -46,9 +46,20 @@ Scenario: Shading an intersection from the inside
   And s2 <- the second object in w
   And i1 <- intersection(0.5, s2)
   When shape_hit <- hit(i1, r)
-  And w.light <- light
+  And w.lights[0] <- light
   And c <- shade_hit(w, shape_hit)
   Then c = color(0.90498, 0.90498, 0.90498)
+
+Scenario: Shading an intersection with two lights
+  Given w <- default_world()
+  And light <- point_light(point(10, 10, 10), color(0.1, 0.1, 0.1))
+  And r <- ray(point(0, 0, -5), vector(0, 0, 1))
+  And s1 <- the first object in w
+  And i1 <- intersection(4, s1)
+  When w.add_light(light)
+  When shape_hit <- hit(i1, r)
+  And c <- shade_hit(w, shape_hit)
+  Then c = color(0.38866, 0.48583, 0.29149)
 
 Scenario: The color when a ray misses
   Given w <- default_world()
@@ -75,22 +86,22 @@ Scenario: The color with an intersection behind the ray
 Scenario: There is no shadow when nothing is collinear with point and light
   Given w <- default_world()
   And p <- point(0, 10, 0)
-  Then is_shadowed(w, p) is false
+  Then is_shadowed(w, p, w.lights[0]) is false
 
 Scenario: The shadow when an object is between the point and the light
   Given w <- default_world()
   And p <- point(10, -10, 10)
-  Then is_shadowed(w, p) is true
+  Then is_shadowed(w, p, w.lights[0]) is true
 
 Scenario: There is no shadow when an object is behind the light
   Given w <- default_world()
   And p <- point(-20, 20, -20)
-  Then is_shadowed(w, p) is false
+  Then is_shadowed(w, p, w.lights[0]) is false
 
 Scenario: There is no shadow when an object is behind the point
   Given w <- default_world()
   And p <- point(-2, 2, -2)
-  Then is_shadowed(w, p) is false
+  Then is_shadowed(w, p, w.lights[0]) is false
 
 Scenario: shade_hit() is given an intersection in shadow
   Given w <- world()
@@ -104,7 +115,7 @@ Scenario: shade_hit() is given an intersection in shadow
   And r <- ray(point(0, 0, 5), vector(0, 0, 1))
   And i1 <- intersection(4, s2)
   When shape_hit <- hit(i1, r)
-  And w.light <- light
+  And w.add_light(light)
   And c <- shade_hit(w, shape_hit)
   Then c = color(0.1, 0.1, 0.1)
 
@@ -160,7 +171,7 @@ Scenario: color_at() with mutually reflective surfaces
     | transform | translation(0, 1, 0) |
   And p2 is added to w
   And r <- ray(point(0, 0, 0), vector(0, 1, 0))
-  When w.light <- light
+  When w.add_light(light)
   Then color_at(w, r) should terminate successfully
 
 Scenario: The reflected color at the maximum recursive depth

@@ -56,7 +56,7 @@ def add_to_scene(scene, item):
     if item_type == 'camera':
         scene[0] = parse_method(item)
     elif item_type == 'light':
-        scene[1].light = parse_method(item)
+        scene[1].add_light(parse_method(item))
     else:
         scene[1].objects.append(parse_method(item))
 
