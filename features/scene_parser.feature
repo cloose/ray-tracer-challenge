@@ -79,3 +79,36 @@ Feature: Scene Parser
     When w <- scene_from_yaml(data)
     Then w.objects[0].material.color = color(0.5, 0.5, 1.0)
     And w.objects[0].material.ambient = 1
+
+  Scenario: Extends previously definied materials
+    Given data <- yaml:
+    """
+    - define: parent-material
+      value:
+         ambient: 0.5
+    - define: child-material
+      extend: parent-material
+      value:
+         color: [0.5, 0.5, 1.0]
+    - add: sphere
+      material: child-material
+    """
+    When w <- scene_from_yaml(data)
+    Then w.objects[0].material.color = color(0.5, 0.5, 1.0)
+    And w.objects[0].material.ambient = 0.5
+
+  Scenario: Child material overwrite inherited parent values
+    Given data <- yaml:
+    """
+    - define: parent-material
+      value:
+         ambient: 0.5
+    - define: child-material
+      extend: parent-material
+      value:
+         ambient: 1.0
+    - add: sphere
+      material: child-material
+    """
+    When w <- scene_from_yaml(data)
+    Then w.objects[0].material.ambient = 1.0

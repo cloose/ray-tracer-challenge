@@ -1,7 +1,8 @@
-from shapes import Cone, Cube, Cylinder, Plane, Sphere
 from lights import PointLight
-from .world import World
+from shapes import Cone, Cube, Cylinder, Plane, Sphere
+
 from .camera import Camera
+from .world import World
 
 _TYPE_MAP = {
     'camera': Camera.from_yaml,
@@ -63,5 +64,23 @@ def add_to_scene(scene, item):
 
 def add_to_definitions(definitions, item):
     name = item['define']
-    values = item['value']
-    definitions[name] = values
+
+    parent_values = None
+
+    if 'extend' in item:
+        parent_name = item['extend']
+        if not parent_name in definitions:
+            raise ValueError(f"Unknown parent definition '{parent_name}'")
+        parent_values = definitions.get(parent_name)
+
+    definitions[name] = merge_definitions(parent_values, item['value'])
+
+
+def merge_definitions(parent, child):
+    if not parent:
+        return child
+
+    if isinstance(child, list):
+        return parent.extend(child)
+
+    return {**parent, **child}
