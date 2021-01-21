@@ -44,11 +44,11 @@ class World:
         surface = color(0, 0, 0)
 
         for light in self.lights:
-            shadowed = self.is_shadowed(hit.over_point, light)
+            light_intensity = light.intensity_at(hit.over_point, self)
             surface = add(
                 surface,
                 lighting(hit.object.material, hit.object, light, hit.point,
-                         hit.eyev, hit.normalv, shadowed))
+                         hit.eyev, hit.normalv, light_intensity))
 
         reflected = self.reflected_color(hit, remaining)
         refracted = self.refracted_color(hit, remaining)
@@ -104,8 +104,8 @@ class World:
         return multiply(self.color_at(refract_ray, remaining - 1),
                         hit.object.material.transparency)
 
-    def is_shadowed(self, hit_point, light):
-        vec = subtract(light.position, hit_point)
+    def is_shadowed(self, light_position, hit_point):
+        vec = subtract(light_position, hit_point)
         distance = magnitude(vec)
         direction = normalize(vec)
 

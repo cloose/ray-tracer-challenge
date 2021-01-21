@@ -1,9 +1,12 @@
 from math import sqrt
-from behave import given, when, then  # pylint: disable=no-name-in-module
+
+from behave import given, then, when  # pylint: disable=no-name-in-module
+
 from asserts import assert_float, assert_tuple
-from core import point, color, vector, lighting
+from core import color, lighting, normalize, point, subtract, vector
+from patterns import (CheckersPattern, GradientPattern, RingPattern,
+                      StripePattern)
 from shapes import Material
-from patterns import CheckersPattern, StripePattern, RingPattern, GradientPattern
 
 
 @given(u'm <- material()')
@@ -11,19 +14,24 @@ def step_create_default_material_m(context):
     context.m = Material()
 
 
-@given(u'm.ambient <- 1')
-def step_set_ambient_of_m(context):
-    context.m.ambient = 1
+@given(u'm.ambient <- {value:g}')
+def step_set_ambient_of_m(context, value):
+    context.m.ambient = value
 
 
-@given(u'm.diffuse <- 0')
-def step_set_diffuse_of_m(context):
-    context.m.diffuse = 0
+@given(u'm.diffuse <- {value:g}')
+def step_set_diffuse_of_m(context, value):
+    context.m.diffuse = value
 
 
-@given(u'm.specular <- 0')
-def step_set_specular_of_m(context):
-    context.m.specular = 0
+@given(u'm.specular <- {value:g}')
+def step_set_specular_of_m(context, value):
+    context.m.specular = value
+
+
+@given(u'm.color <- color({red:g}, {green:g}, {blue:g})')
+def step_set_color_of_m(context, red, green, blue):
+    context.m.color = color(red, green, blue)
 
 
 @given(u'm.pattern <- stripe_pattern(color(1, 1, 1), color(0, 0, 0))')
@@ -41,33 +49,47 @@ def step_create_vector_v1_reflection(context):
     context.v1 = vector(0, -sqrt(2) / 2, -sqrt(2) / 2)
 
 
+@given(u'v1 <- normalize(eye - p)')
+def step_create_eye_vector_v1_from_eye_to_p(context):
+    context.v1 = normalize(subtract(context.eye, context.p))
+
+
+@given(u'v2 <- vector(p.x, p.y, p.z)')
+def step_create_normal_vector_v2_from_point(context):
+    context.v2 = vector(context.p[0], context.p[1], context.p[2])
+
+
 @when(u'm <- Material.from_yaml(data)')
 def step_create_material_m_from_yaml(context):
     context.m = Material.from_yaml(context.data)
 
 
 @when(u'c <- lighting(m, s, light, p, v1, v2)')
-def step_set_c_to_calculated_lighting(context):
+def step_set_c_to_calculated_lighting_with_default_intensity(context):
     context.c = lighting(context.m, context.s, context.light, context.p,
-                         context.v1, context.v2)
+                         context.v1, context.v2, 1.0)
 
 
-@when(u'c <- lighting(m, s, light, p, v1, v2, in_shadow)')
-def step_set_c_to_calculated_lighting_incl_shadow(context):
-    context.c = lighting(context.m, context.s, context.light, context.p,
-                         context.v1, context.v2, True)
+@when(
+    u'c <- lighting(m, {shape_var}, light, {point_var}, v1, v2, {intensity:g})'
+)
+def step_set_c_to_calculated_lighting(context, shape_var, point_var,
+                                      intensity):
+    shape = getattr(context, shape_var)
+    p = getattr(context, point_var)
+    context.c = lighting(context.m, shape, context.light, p, context.v1,
+                         context.v2, intensity)
 
 
-@when(u'c1 <- lighting(m, s, light, point(0.9, 0, 0), v1, v2, false)')
-def step_set_c1_to_calculated_lighting(context):
-    context.c1 = lighting(context.m, context.s, context.light,
-                          point(0.9, 0, 0), context.v1, context.v2, False)
-
-
-@when(u'c2 <- lighting(m, s, light, point(1.1, 0, 0), v1, v2, false)')
-def step_set_c2_to_calculated_lighting(context):
-    context.c2 = lighting(context.m, context.s, context.light,
-                          point(1.1, 0, 0), context.v1, context.v2, False)
+@when(
+    u'c2 <- lighting(m, {shape_var}, light, {point_var}, v1, v2, {intensity:g})'
+)
+def step_set_c2_to_calculated_lighting(context, shape_var, point_var,
+                                       intensity):
+    shape = getattr(context, shape_var)
+    p = getattr(context, point_var)
+    context.c2 = lighting(context.m, shape, context.light, p, context.v1,
+                          context.v2, intensity)
 
 
 @then(u'm.color = color({red:g}, {green:g}, {blue:g})')

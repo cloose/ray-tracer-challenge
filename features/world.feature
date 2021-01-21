@@ -83,25 +83,42 @@ Scenario: The color with an intersection behind the ray
   When c <- color_at(w, r)
   Then c = s2.material.color
 
-Scenario: There is no shadow when nothing is collinear with point and light
-  Given w <- default_world()
-  And p <- point(0, 10, 0)
-  Then is_shadowed(w, p, w.lights[0]) is false
+  Scenario: There is no shadow when nothing is collinear with point and light
+    Given w <- default_world()
+    And p <- point(0, 10, 0)
+    And light_position <- point(-10, 10, -10)
+    Then is_shadowed(w, light_position, p) is false
 
-Scenario: The shadow when an object is between the point and the light
-  Given w <- default_world()
-  And p <- point(10, -10, 10)
-  Then is_shadowed(w, p, w.lights[0]) is true
+  Scenario: The shadow when an object is between the point and the light
+    Given w <- default_world()
+    And p <- point(10, -10, 10)
+    And light_position <- point(-10, 10, -10)
+    Then is_shadowed(w, light_position, p) is true
 
-Scenario: There is no shadow when an object is behind the light
-  Given w <- default_world()
-  And p <- point(-20, 20, -20)
-  Then is_shadowed(w, p, w.lights[0]) is false
+  Scenario: There is no shadow when an object is behind the light
+    Given w <- default_world()
+    And p <- point(-20, 20, -20)
+    And light_position <- point(-10, 10, -10)
+    Then is_shadowed(w, light_position, p) is false
 
-Scenario: There is no shadow when an object is behind the point
-  Given w <- default_world()
-  And p <- point(-2, 2, -2)
-  Then is_shadowed(w, p, w.lights[0]) is false
+  Scenario: There is no shadow when an object is behind the point
+    Given w <- default_world()
+    And p <- point(-2, 2, -2)
+    And light_position <- point(-10, 10, -10)
+    Then is_shadowed(w, light_position, p) is false
+
+  Scenario Outline: is_shadow tests for occlusion between two points
+    Given w <- default_world()
+    And light_position <- point(-10, -10, -10)
+    And p <- <point>
+    Then is_shadowed(w, light_position, p) is <result>
+
+    Examples:
+      | point                | result |
+      | point(-10, -10, 10)  | false  |
+      | point(10, 10, 10)    | true   |
+      | point(-20, -20, -20) | false  |
+      | point(-5, -5, -5)    | false  |
 
 Scenario: shade_hit() is given an intersection in shadow
   Given w <- world()

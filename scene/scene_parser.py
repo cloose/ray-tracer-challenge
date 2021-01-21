@@ -1,4 +1,4 @@
-from lights import PointLight
+from lights import AreaLight, PointLight
 from shapes import Cone, Cube, Cylinder, Plane, Sphere
 
 from .camera import Camera
@@ -7,6 +7,7 @@ from .world import World
 _TYPE_MAP = {
     'camera': Camera.from_yaml,
     'light': PointLight.from_yaml,
+    'area_light': AreaLight.from_yaml,
     'cone': Cone.from_yaml,
     'cube': Cube.from_yaml,
     'cylinder': Cylinder.from_yaml,
@@ -56,7 +57,7 @@ def add_to_scene(scene, item):
 
     if item_type == 'camera':
         scene[0] = parse_method(item)
-    elif item_type == 'light':
+    elif item_type == 'light' or item_type == 'area_light':
         scene[1].add_light(parse_method(item))
     else:
         scene[1].objects.append(parse_method(item))

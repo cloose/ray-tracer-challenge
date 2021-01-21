@@ -1,7 +1,11 @@
 from math import sqrt
-from behave import given, when, then  # pylint: disable=no-name-in-module
+
+from behave import given, then, when  # pylint: disable=no-name-in-module
+
 from asserts import assert_float, assert_tuple
-from core import tuple_4d, point, vector, ispoint, isvector, add, subtract, negate, multiply, divide, magnitude, normalize, dot, cross, reflect
+from core import (add, cross, divide, dot, ispoint, isvector, magnitude,
+                  multiply, negate, normalize, point, reflect, subtract,
+                  tuple_4d, vector)
 
 
 @given(u'a <- tuple({x:g}, {y:g}, {z:g}, {w:g})')
@@ -42,6 +46,16 @@ def step_create_point_p3(context, x, y, z):
 @given(u'to <- point({x:g}, {y:g}, {z:g})')
 def step_create_point_to(context, x, y, z):
     context.to = point(x, y, z)
+
+
+@given(u'corner <- point({x:g}, {y:g}, {z:g})')
+def step_create_point_corner(context, x, y, z):
+    context.corner = point(x, y, z)
+
+
+@given(u'eye <- point({x:g}, {y:g}, {z:g})')
+def step_create_point_eye(context, x, y, z):
+    context.eye = point(x, y, z)
 
 
 @given(u'v <- vector({x:g}, {y:g}, {z:g})')

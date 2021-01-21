@@ -3,6 +3,7 @@ from .hit import *
 from .intersection import *
 from .matrix import *
 from .rays import *
+from .sequences import *
 from .shader import *
 from .transformations import *
 from .tuples import *

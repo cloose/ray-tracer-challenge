@@ -41,6 +41,25 @@ Feature: Scene Parser
     When w <- scene_from_yaml(data)
     Then w.lights[1] = light 
 
+  Scenario: Adds area light source to world
+    Given data <- yaml:
+    """
+    - add: area_light
+      corner: [-1, 2, 4]
+      uvec: [2, 0, 0]
+      vvec: [0, 2, 0]
+      usteps: 10
+      vsteps: 10
+      jitter: true
+      intensity: [1.5, 1.5, 1.5]
+    """
+    And corner <- point(-1, 2, 4)
+    And v1 <- vector(2, 0, 0)
+    And v2 <- vector(0, 2, 0)
+    And light <- area_light(corner, v1, 10, v2, 10, color(1.5, 1.5, 1.5))
+    When w <- scene_from_yaml(data)
+    Then w.lights[0] = light 
+
   Scenario: Adds shape to world
     Given data <- yaml:
     """

@@ -1,7 +1,7 @@
 from behave import given, then, when  # pylint: disable=no-name-in-module
 
 from asserts import assert_float, assert_tuple
-from core import color, scaling, translation
+from core import color, point, scaling, translation
 from scene import World
 from shapes import Plane, Sphere
 
@@ -125,6 +125,16 @@ def step_add_p2_to_w(context):
     context.w.objects.append(context.p2)
 
 
+@given(u'light_position <- point({x:g}, {y:g}, {z:g})')
+def step_create_point_light_position(context, x, y, z):
+    context.light_position = point(x, y, z)
+
+
+@given(u'light <- w.lights[{index:d}]')
+def step_assign_light_to_light_of_w(context, index):
+    context.light = context.w.lights[index]
+
+
 @when(u'w.lights[{index:d}] <- light')
 def step_set_light_of_w_at_index_to_light(context, index):
     context.w.lights[index] = context.light
@@ -206,10 +216,10 @@ def step_assert_c_equals_s2_material_color(context):
     assert_tuple(context.c, context.s2.material.color)
 
 
-@then(u'is_shadowed(w, p, w.lights[{index:d}]) is {expected}')
-def step_assert_p_is_not_in_shaddow(context, index, expected):
-    assert context.w.is_shadowed(
-        context.p, context.w.lights[index]) == (expected.lower() == "true")
+@then(u'is_shadowed(w, light_position, p) is {expected}')
+def step_assert_p_is_not_in_shaddow(context, expected):
+    assert context.w.is_shadowed(context.light_position,
+                                 context.p) == (expected.lower() == "true")
 
 
 @then(u'color_at(w, r) should terminate successfully')

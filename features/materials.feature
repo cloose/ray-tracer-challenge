@@ -127,7 +127,7 @@ Scenario: Lighting with the surface in shadow
   Given v1 <- vector(0, 0, -1)
   And v2 <- vector(0, 0, -1)
   And light <- point_light(point(0, 0, -10), color(1, 1, 1))
-  When c <- lighting(m, s, light, p, v1, v2, in_shadow)
+  When c <- lighting(m, s, light, p, v1, v2, 0.0)
   Then c = color(0.1, 0.1, 0.1)
 
 Scenario: Lighting with a pattern applied
@@ -135,12 +135,14 @@ Scenario: Lighting with a pattern applied
   And m.ambient <- 1
   And m.diffuse <- 0
   And m.specular <- 0
+  And p1 <- point(0.9, 0, 0)
+  And p2 <- point(1.1, 0, 0)
   And v1 <- vector(0, 0, -1)
   And v2 <- vector(0, 0, -1)
   And light <- point_light(point(0, 0, -10), color(1, 1, 1))
-  When c1 <- lighting(m, s, light, point(0.9, 0, 0), v1, v2, false)
-  And c2 <- lighting(m, s, light, point(1.1, 0, 0), v1, v2, false)
-  Then c1 = color(1, 1, 1)
+  When c <- lighting(m, s, light, p1, v1, v2, 0.0)
+  And c2 <- lighting(m, s, light, p2, v1, v2, 0.0)
+  Then c = color(1, 1, 1)
   And c2 = color(0, 0, 0)
 
 Scenario: Reflectivity for the default material
@@ -151,3 +153,46 @@ Scenario: Transparency and Refractive Index for the default material
   Given m <- material()
   Then m.transparency = 0.0
   And m.refractive_index = 1.0
+
+  Scenario Outline: lighting() uses light intensity to attenuate color
+    Given w <- default_world()
+    And light <- point_light(point(0, 0, -10), color(1, 1, 1))
+    And s1 <- the first object in w
+    And m.ambient <- 0.1
+    And m.diffuse <- 0.9
+    And m.specular <- 0
+    And m.color <- color(1, 1, 1)
+    And p <- point(0, 0, -1)
+    And v1 <- vector(0, 0, -1)
+    And v2 <- vector(0, 0, -1)
+    When w.lights[0] <- light
+    And c <- lighting(m, s1, light, p, v1, v2, <intensity>)
+    Then c = <result>
+
+    Examples:
+      | intensity | result                  |
+      | 1.0       | color(1, 1, 1)          |
+      | 0.5       | color(0.55, 0.55, 0.55) |
+      | 0.0       | color(0.1, 0.1, 0.1)    |
+
+  Scenario Outline: lighting() samples the area light
+    Given corner <- point(-0.5, -0.5, -5)
+    And v1 <- vector(1, 0, 0)
+    And v2 <- vector(0, 1, 0)
+    And light <- area_light(corner, v1, 2, v2, 2, color(1, 1, 1))
+    And m.ambient <- 0.1
+    And m.diffuse <- 0.9
+    And m.specular <- 0
+    And m.color <- color(1, 1, 1)
+    And eye <- point(0, 0, -5)
+    And p <- <point>
+    And v1 <- normalize(eye - p)
+    And v2 <- vector(p.x, p.y, p.z)
+    When c <- lighting(m, s, light, p, v1, v2, 1.0)
+    Then c = <result>
+
+    Examples:
+      | point                      | result                        |
+      | point(0, 0, -1)            | color(0.9965, 0.9965, 0.9965) |
+      | point(0, 0.7071, -0.7071)  | color(0.62318, 0.62318, 0.62318) |
+      #book: | point(0, 0.7071, -0.7071)  | color(0.6232, 0.6232, 0.6232) |
