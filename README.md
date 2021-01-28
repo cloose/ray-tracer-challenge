@@ -6,6 +6,10 @@ A ray tracer written in Python based on the book "[The Ray Tracer Challenge](htt
 
 This is my attempt to learn Python by implementing the test specifications for a ray tracer in the book. The BDD tests have been implemented using [Behave](https://github.com/behave/behave). These are really my first steps in Python. So please be kind...
 
+# Examples
+
+![Soft Shadows](images/soft-shadows.png)
+
 # License
 
 MIT (see LICENSE)
