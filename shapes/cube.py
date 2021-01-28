@@ -1,5 +1,7 @@
 from math import inf
-from core import Intersection, vector, transform_from_yaml
+
+from core import Intersection, transform_from_yaml, vector
+
 from .material import Material
 from .shape import Shape
 
@@ -11,6 +13,7 @@ class Cube(Shape):
     @classmethod
     def from_yaml(cls, data):
         cube = cls()
+        cube.init_from_yaml(data)
 
         if 'transform' in data:
             cube.set_transform(transform_from_yaml(data))

@@ -3,7 +3,7 @@ from math import sqrt
 from core import Hit, Ray, add, color, dot
 from core import hit as hit_at
 from core import (lighting, magnitude, multiply, normalize, point, scaling,
-                  subtract)
+                  shadow_hit, subtract)
 from lights import PointLight
 from shapes import Material, Sphere
 
@@ -111,5 +111,5 @@ class World:
 
         ray = Ray(hit_point, direction)
         intersections = self.intersect(ray)
-        hit_intersection = hit_at(intersections)
+        hit_intersection = shadow_hit(intersections)
         return hit_intersection is not None and hit_intersection.t < distance

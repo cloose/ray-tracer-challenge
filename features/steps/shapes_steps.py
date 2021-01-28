@@ -1,9 +1,10 @@
 from math import pi, sqrt
-from behave import given, when, then  # pylint: disable=no-name-in-module
-from asserts import assert_tuple, assert_matrix
-from core import color, point, vector, normalize
-from core import identity_matrix, multiply_matrix
-from core import translation, scaling, rotation_z, rotation_y
+
+from behave import given, then, when  # pylint: disable=no-name-in-module
+
+from asserts import assert_matrix, assert_tuple
+from core import (color, identity_matrix, multiply_matrix, normalize, point,
+                  rotation_y, rotation_z, scaling, translation, vector)
 from shapes import Material, Shape
 
 
@@ -134,6 +135,11 @@ def step_assert_shape_not_includes(context, shape_a, shape_b):
     a = getattr(context, shape_a)
     b = getattr(context, shape_b)
     assert not a.includes(b)
+
+
+@then(u's.cast_shadow = {expected}')
+def step_assert_cast_shadow_of_s(context, expected):
+    assert context.s.cast_shadow == (expected.lower() == "true")
 
 
 @then(u's.transform = identity_matrix')

@@ -8,10 +8,12 @@ Feature: Cubes
       - [ translate, 0, 5, 0 ]
     material:
       color: [1, 0.3, 0.2]
+    shadow: false
     """"
     When s <- Cube.from_yaml(data)
     Then s.transform = translation(0, 5, 0)
     And s.material.color = color(1, 0.3, 0.2)
+    And s.cast_shadow = false
 
   Scenario Outline: A ray intersects a cube
     Given c <- cube()

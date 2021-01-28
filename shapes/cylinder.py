@@ -1,5 +1,7 @@
 from math import inf, sqrt
-from core import Intersection, vector, transform_from_yaml
+
+from core import Intersection, transform_from_yaml, vector
+
 from .material import Material
 from .shape import Shape
 
@@ -15,6 +17,7 @@ class Cylinder(Shape):
     @classmethod
     def from_yaml(cls, data):
         cylinder = cls()
+        cylinder.init_from_yaml(data)
 
         if 'min' in data:
             cylinder.minimum = data['min']

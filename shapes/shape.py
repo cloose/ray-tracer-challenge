@@ -1,4 +1,5 @@
-from core import normalize, identity_matrix, inverse, multiply_tuple, transpose
+from core import identity_matrix, inverse, multiply_tuple, normalize, transpose
+
 from .material import Material
 
 
@@ -10,6 +11,11 @@ class Shape:
         self.__inverse_transform = identity_matrix()
         self.material = Material()
         self.parent = None
+        self.cast_shadow = True
+
+    def init_from_yaml(self, data):
+        if 'shadow' in data:
+            self.cast_shadow = data['shadow']
 
     def set_transform(self, transformation_matrix):
         """set transformation matrix for the shape"""

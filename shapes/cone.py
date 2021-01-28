@@ -1,6 +1,8 @@
 from math import inf, sqrt
-from core import Intersection, vector, transform_from_yaml
-from .shape import Shape, Material
+
+from core import Intersection, transform_from_yaml, vector
+
+from .shape import Material, Shape
 
 
 class Cone(Shape):
@@ -14,6 +16,7 @@ class Cone(Shape):
     @classmethod
     def from_yaml(cls, data):
         cone = cls()
+        cone.init_from_yaml(data)
 
         if 'min' in data:
             cone.minimum = data['min']

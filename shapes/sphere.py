@@ -1,5 +1,7 @@
 from math import sqrt
-from core import Intersection, point, subtract, dot, transform_from_yaml
+
+from core import Intersection, dot, point, subtract, transform_from_yaml
+
 from .material import Material
 from .shape import Shape
 
@@ -7,12 +9,15 @@ from .shape import Shape
 class Sphere(Shape):
     def __init__(self):
         super().__init__()
+        self.transformations = []
 
     @classmethod
     def from_yaml(cls, data):
         sphere = cls()
+        sphere.init_from_yaml(data)
 
         if 'transform' in data:
+            sphere.transformations = data['transform']
             sphere.set_transform(transform_from_yaml(data))
 
         if 'material' in data:

@@ -11,6 +11,7 @@ Feature: Cones
       - [ translate, 0, 5, 0 ]
     material:
       color: [1, 0.3, 0.2]
+    shadow: false
     """"
     When c <- Cone.from_yaml(data)
     Then c.minimum = 1
@@ -18,6 +19,7 @@ Feature: Cones
     And c.closed = true
     And c.transform = translation(0, 5, 0)
     And c.material.color = color(1, 0.3, 0.2)
+    And c.cast_shadow = false
 
   Scenario Outline: Intersecting a cone with a ray
     Given c <- cone()

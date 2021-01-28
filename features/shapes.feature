@@ -10,6 +10,10 @@ Feature: shapes
     Then A includes A
     And A not includes B
 
+  Scenario: A shape casts a shadow by default
+    Given s <- test_shape()
+    Then s.cast_shadow = true
+
   Scenario: A shape's default transformation
     Given s <- test_shape()
     Then s.transform = identity_matrix
